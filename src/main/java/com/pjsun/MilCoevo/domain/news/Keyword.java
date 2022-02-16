@@ -1,6 +1,7 @@
-package com.pjsun.MilCoevo.domain.group;
+package com.pjsun.MilCoevo.domain.news;
 
 import com.pjsun.MilCoevo.domain.BaseEntity;
+import com.pjsun.MilCoevo.domain.group.Group;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -43,7 +44,6 @@ public class Keyword extends BaseEntity {
         }
     }
 
-    @Builder(builderClassName = "createKeywordBuilder", buildMethodName = "createKeywordBuilder")
     public static Keyword createKeyword(String content, Group group) {
         Assert.hasText(content, () -> "[Keyword] content must not be empty");
 

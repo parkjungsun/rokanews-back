@@ -3,6 +3,7 @@ package com.pjsun.MilCoevo.domain.group;
 import com.pjsun.MilCoevo.domain.BaseEntity;
 import com.pjsun.MilCoevo.domain.BooleanToYNConverter;
 import com.pjsun.MilCoevo.domain.member.Member;
+import com.pjsun.MilCoevo.domain.news.Keyword;
 import com.pjsun.MilCoevo.domain.purchase.Purchase;
 import com.pjsun.MilCoevo.domain.schedule.Schedule;
 import com.pjsun.MilCoevo.domain.absence.Absence;
@@ -125,8 +126,8 @@ public class Group extends BaseEntity {
     }
 
     public void updateInviteCode() {
-        String newCode = createInviteCode();
-        this.inviteCode = newCode;
+        String code = createInviteCode();
+        this.inviteCode = code;
     }
 
     public void updateGroupName(String groupName) {

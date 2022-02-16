@@ -19,7 +19,7 @@ public class News extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "news_idd")
+    @Column(name = "news_id")
     private Long id;
 
     @Column(length = 50)
@@ -31,14 +31,15 @@ public class News extends BaseEntity {
 
     private String link;
 
-    private LocalDateTime pubDate;
+    private String pubDate;
+
+    private String index;
 
     /* 생성자 */
     @Builder(builderClassName = "createNewsBuilder", builderMethodName = "createNewsBuilder")
-    News(String keyword, String title, String imageLink, String link, LocalDateTime pubDate) {
+    News(String keyword, String title, String imageLink, String link, String pubDate, String index) {
         Assert.hasText(keyword, () -> "[News] keyword must not be empty");
         Assert.hasText(title, () -> "[News] title must not be empty");
-        Assert.hasText(imageLink, () -> "[News] imageLink must not be empty");
         Assert.hasText(link, () -> "[News] link must not be empty");
         Assert.notNull(pubDate, () -> "[News] pubDate must not be empty");
 
@@ -47,6 +48,7 @@ public class News extends BaseEntity {
         this.imageLink = imageLink;
         this.link = link;
         this.pubDate = pubDate;
+        this.index = index;
     }
 
     /* 비즈니스 로직 */

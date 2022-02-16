@@ -2,7 +2,7 @@ package com.pjsun.MilCoevo.domain.group.dto;
 
 import lombok.*;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class GroupInfoResponseDto {
