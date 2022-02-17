@@ -17,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -44,10 +46,11 @@ public class NewsController {
 
     @GetMapping("/{groupId}/keyword")
     public ResponseEntity<ResponseDto> getGroupKeywords (
-            @PathVariable Long groupId,
-            Pageable pageable) {
+            @PathVariable Long groupId) {
 
-        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE);
+        List<String> groupKeywords = newsService.getGroupKeywords(groupId);
+
+        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, groupKeywords);
 
         return new ResponseEntity<>(data, HttpStatus.OK);
     }

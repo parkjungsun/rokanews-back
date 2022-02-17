@@ -43,7 +43,7 @@ public class JwtFilter extends GenericFilter{
             // Authentication securityContext 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            log.info("Security Context에 '{}' 인증정보를 저장했습니다. uri: {}", authentication.getName(), requestURI);
+            log.debug("Security Context에 '{}' 인증정보를 저장했습니다. uri: {}", authentication.getName(), requestURI);
         } else {
             log.debug("Token이 없습니다.");
         }

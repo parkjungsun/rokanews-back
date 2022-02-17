@@ -8,6 +8,9 @@ import com.pjsun.MilCoevo.domain.member.dto.QMemberGroupDto;
 import com.pjsun.MilCoevo.domain.user.QUser;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
@@ -39,12 +42,13 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     }
 
     @Override
-    public List<MemberGroupDto> searchMembersByUserId(Long userId) {
-        return queryFactory
+    public Page<MemberGroupDto> searchMembersByUserId(Long userId, Pageable pageable) {
+        List<MemberGroupDto> memberGroupDtos = queryFactory
                 .select(new QMemberGroupDto(
                         member.group.id.as("groupId"),
                         member.group.groupName,
                         member.rank,
+                        member.info.email,
                         member.info.position,
                         member.info.nickname,
                         member.lastVisitedDate
@@ -53,7 +57,52 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
                         member.user.id.eq(userId),
                         member.isAvailable.eq(true)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory
+                .select(member.count())
+                .from(member)
+                .where(
+                        member.user.id.eq(userId),
+                        member.isAvailable.eq(true)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchOne();
+        if(total == null) total = 0L;
+        return new PageImpl<>(memberGroupDtos, pageable, total);
     }
 
+    public Page<MemberGroupDto> searchMembersByGroupId(Long groupId, Pageable pageable) {
+        List<MemberGroupDto> memberGroupDtos = queryFactory
+                .select(new QMemberGroupDto(
+                        member.group.id.as("groupId"),
+                        member.group.groupName,
+                        member.rank,
+                        member.info.email,
+                        member.info.position,
+                        member.info.nickname,
+                        member.lastVisitedDate
+                )).from(member)
+                .where(
+                        member.group.id.eq(groupId)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(member.count())
+                .from(member)
+                .where(
+                        member.group.id.eq(groupId)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchOne();
+        if(total == null) total = 0L;
+        return new PageImpl<>(memberGroupDtos, pageable, total);
+    }
 }

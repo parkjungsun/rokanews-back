@@ -12,7 +12,7 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Slf4j
-@Getter @Entity
+@Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "keywords")
 @ToString(exclude = {"group"})

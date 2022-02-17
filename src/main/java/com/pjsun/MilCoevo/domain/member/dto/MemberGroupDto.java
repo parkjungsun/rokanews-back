@@ -16,18 +16,20 @@ public class MemberGroupDto {
     private Long groupId;
     private String groupName;
     private Rank rank;
+    private String email;
     private String position;
     private String nickname;
     private LocalDateTime lastVisitedDate;
 
     @QueryProjection
     public MemberGroupDto(
-            Long groupId, String groupName, Rank rank,
+            Long groupId, String groupName, Rank rank, String email,
             String position, String nickname, LocalDateTime lastVisitedDate) {
 
         this.groupId =groupId;
         this.groupName = groupName;
         this.rank = rank;
+        this.email = email;
         this.position = position;
         this.nickname = nickname;
         this.lastVisitedDate = lastVisitedDate;

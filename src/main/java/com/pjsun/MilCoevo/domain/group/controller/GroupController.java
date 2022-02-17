@@ -1,14 +1,15 @@
 package com.pjsun.MilCoevo.domain.group.controller;
 
-import com.pjsun.MilCoevo.domain.group.dto.GroupCreateRequestDto;
-import com.pjsun.MilCoevo.domain.group.dto.GroupInfoResponseDto;
-import com.pjsun.MilCoevo.domain.group.dto.GroupRegisterRequestDto;
-import com.pjsun.MilCoevo.domain.group.dto.UpdateGroupNameRequestDto;
+import com.pjsun.MilCoevo.domain.group.dto.*;
 import com.pjsun.MilCoevo.domain.group.service.GroupService;
+import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
+import com.pjsun.MilCoevo.domain.member.service.MemberService;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/group")
 public class GroupController {
 
+    private final MemberService memberService;
     private final GroupService groupService;
 
     @Value("${error.common.bindingError}")
@@ -69,7 +71,7 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @PostMapping("/register/{inviteCode}")
+    @GetMapping("/register/{inviteCode}")
     public ResponseEntity<ResponseDto> confirmationGroup (
             @PathVariable String inviteCode) {
 
@@ -116,6 +118,47 @@ public class GroupController {
         String newInviteCode = groupService.updateInviteCode(groupId);
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, newInviteCode);
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    @GetMapping("/{groupId}/member")
+    public ResponseEntity<ResponseDto> getMembers(
+            @PathVariable Long groupId,
+            Pageable pageable) {
+
+        Page<MemberGroupDto> members = groupService.getMembers(groupId, pageable);
+
+        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, members);
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{groupId}/member/{memberId}")
+    public ResponseEntity<ResponseDto> updateMemberRank(
+            @PathVariable Long memberId,
+            @Validated @RequestBody UpdateMemberRankDto rankDto,
+            BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            ResponseDto error = new ResponseDto(BINDING_ERROR_EXCEPTION, bindingResult);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
+        Long id = memberService.updateMemberRank(memberId, rankDto.getRank());
+
+        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, id);
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{groupId}/member/{memberId}")
+    public ResponseEntity<ResponseDto> banMember(
+            @PathVariable Long memberId) {
+
+        memberService.banMember(memberId);
+
+        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE);
 
         return new ResponseEntity<>(data, HttpStatus.OK);
     }

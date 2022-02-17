@@ -2,6 +2,7 @@ package com.pjsun.MilCoevo.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.pjsun.MilCoevo.dto.ResponseDto;
+import com.pjsun.MilCoevo.exception.ForbiddenException;
 import com.pjsun.MilCoevo.exception.InvalidTokenException;
 import com.pjsun.MilCoevo.exception.NoTokenException;
 import com.querydsl.core.NonUniqueResultException;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,6 +32,9 @@ public class CommonControllerAdvice {
 
     @Value("${error.common.nonUniqueResultException}")
     private String NON_UNIQUE_RESULT_EXCEPTION;
+
+    @Value("${error.common.forbiddenException}")
+    private String FORBIDDEN_EXCEPTION;
 
     @ExceptionHandler(NonUniqueResultException.class)
     public ResponseEntity<ResponseDto> nonUniqueEx(NonUniqueResultException e) {
@@ -58,6 +61,15 @@ public class CommonControllerAdvice {
         ResponseDto error = new ResponseDto(NO_TOKEN_EXCEPTION, "No Authentication Token");
 
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ResponseDto> forbiddenEx(ForbiddenException e) {
+
+        log.debug("Exception: forbiddenEx");
+        ResponseDto error = new ResponseDto(FORBIDDEN_EXCEPTION, "No Authorization");
+
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
 

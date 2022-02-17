@@ -115,16 +115,8 @@ public class Member extends BaseEntity {
         this.isAvailable = condition;
     }
 
-    public void blockMember() {
-        this.rank = Rank.OTHERS;
-    }
-
-    public void approveMember() {
-        this.rank = Rank.MEMBER;
-    }
-
-    public void raiseToLeader() {
-        this.rank = Rank.LEADER;
+    public void updateRank(Rank rank) {
+        this.rank = rank;
     }
 
     public void changePresentStatus(PresentStatus presentStatus) {

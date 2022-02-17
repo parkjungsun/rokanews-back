@@ -5,6 +5,7 @@ import com.pjsun.MilCoevo.domain.group.dto.GroupInfoResponseDto;
 import com.pjsun.MilCoevo.domain.group.repository.GroupRepository;
 import com.pjsun.MilCoevo.domain.member.Identification;
 import com.pjsun.MilCoevo.domain.member.Member;
+import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
 import com.pjsun.MilCoevo.domain.member.repository.MemberRepository;
 import com.pjsun.MilCoevo.domain.user.User;
 import com.pjsun.MilCoevo.domain.user.service.UserService;
@@ -12,6 +13,8 @@ import com.pjsun.MilCoevo.exception.InactiveGroupException;
 import com.pjsun.MilCoevo.exception.NoExistGroupException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,25 +81,29 @@ public class GroupService {
     }
 
     public GroupInfoResponseDto getGroupInfo(Long groupId) {
-        //TODO Check Author Leader
-        Group group = groupRepository.findById(groupId).orElseThrow(NoExistGroupException::new);
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(NoExistGroupException::new);
         return new GroupInfoResponseDto(group.getInviteCode(), group.getGroupName());
     }
 
     @Transactional
     public String updateGroupName(Long groupId, String groupName) {
-        //TODO Check Author Leader
-        Group group = groupRepository.findById(groupId).orElseThrow(NoExistGroupException::new);
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(NoExistGroupException::new);
         group.updateGroupName(groupName);
         return group.getGroupName();
     }
 
     @Transactional
     public String updateInviteCode(Long groupId) {
-        //TODO Check Author Leader
-        Group group = groupRepository.findById(groupId).orElseThrow(NoExistGroupException::new);
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(NoExistGroupException::new);
         group.updateInviteCode();
         return group.getInviteCode();
+    }
+
+    public Page<MemberGroupDto> getMembers(Long groupId, Pageable pageable) {
+        return memberRepository.searchMembersByGroupId(groupId, pageable);
     }
 
 }

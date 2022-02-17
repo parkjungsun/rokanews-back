@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface NewsRepositoryCustom {
 
     Page<NewsDto> searchGroupNews(Long groupId, Pageable pageable);
+    List<String> searchGroupAllKeyword(Long groupId);
     Optional<Keyword> searchGroupKeyword(Long groupId, String keyword);
 }

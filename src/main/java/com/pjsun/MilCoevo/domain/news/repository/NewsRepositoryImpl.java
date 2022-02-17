@@ -69,6 +69,15 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
     }
 
     @Override
+    public List<String> searchGroupAllKeyword(Long groupId) {
+        return queryFactory
+                .select(keyword.content)
+                .from(keyword)
+                .where(keyword.group.id.eq(groupId))
+                .fetch();
+    }
+
+    @Override
     public Optional<Keyword> searchGroupKeyword(Long groupId, String key) {
 
         Keyword result = queryFactory

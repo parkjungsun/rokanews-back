@@ -26,16 +26,11 @@ public class NewsService {
     private final KeywordRepository keywordRepository;
 
     public Page<NewsDto> getGroupNews(Long groupId, Pageable pageable) {
-        // TODO Check Author Member
-        Page<NewsDto> news = newsRepository.searchGroupNews(groupId, pageable);
-
-        return news;
+        return newsRepository.searchGroupNews(groupId, pageable);
     }
 
     @Transactional
     public Long addKeyword(Long groupId, String keyword) {
-        // TODO Check Author Member
-
         Keyword key = newsRepository.searchGroupKeyword(groupId, keyword).orElse(null);
 
         if(key == null) {
@@ -50,7 +45,10 @@ public class NewsService {
 
     @Transactional
     public void removeKeyword(Long keywordId) {
-        // TODO Check Author Member
         keywordRepository.deleteById(keywordId);
+    }
+
+    public List<String> getGroupKeywords(Long groupId) {
+       return newsRepository.searchGroupAllKeyword(groupId);
     }
 }
