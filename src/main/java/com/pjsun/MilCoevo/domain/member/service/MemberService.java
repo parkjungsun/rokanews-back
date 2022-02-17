@@ -1,10 +1,13 @@
 package com.pjsun.MilCoevo.domain.member.service;
 
+import com.pjsun.MilCoevo.domain.member.Member;
 import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
+import com.pjsun.MilCoevo.domain.member.dto.MemberResponseDto;
 import com.pjsun.MilCoevo.domain.member.repository.MemberRepository;
 import com.pjsun.MilCoevo.domain.user.User;
 import com.pjsun.MilCoevo.domain.user.service.UserService;
 import com.pjsun.MilCoevo.exception.InvalidTokenException;
+import com.pjsun.MilCoevo.exception.NoExistGroupException;
 import com.pjsun.MilCoevo.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,4 +32,12 @@ public class MemberService {
         return memberRepository.searchMembersByUserId(user.getId());
     }
 
+    public MemberResponseDto getMemberByUserAndGroup(Long groupId) throws InvalidTokenException {
+        User user = userService.getUserFromContext();
+
+        Member member = memberRepository.searchMemberByUserIdAndGroupId(user.getId(), groupId)
+                .orElseThrow(NoExistGroupException::new);
+
+        return new MemberResponseDto(member);
+    }
 }

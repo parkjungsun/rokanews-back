@@ -1,6 +1,7 @@
 package com.pjsun.MilCoevo.domain.member.controller;
 
 import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
+import com.pjsun.MilCoevo.domain.member.dto.MemberResponseDto;
 import com.pjsun.MilCoevo.domain.member.service.MemberService;
 import com.pjsun.MilCoevo.domain.user.service.UserService;
 import com.pjsun.MilCoevo.dto.ResponseDto;
@@ -16,9 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,9 +37,11 @@ public class MemberController {
     private String SUCCESS_RESPONSE;
 
     @ApiOperation(value = "사용자 가입 그룹 조회")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header") })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken",
+                    required = true, dataType = "String", paramType = "header") })
     @GetMapping
-    public ResponseEntity<ResponseDto> Members() throws InvalidTokenException {
+    public ResponseEntity<ResponseDto> getMembers() throws InvalidTokenException {
 
         List<MemberGroupDto> members = memberService.getMembersByUser();
 
@@ -48,4 +49,15 @@ public class MemberController {
 
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
+
+    @GetMapping("/{groupId}")
+    public ResponseEntity<ResponseDto> getMember(@PathVariable Long groupId) {
+
+        MemberResponseDto member = memberService.getMemberByUserAndGroup(groupId);
+
+        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, member);
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
 }

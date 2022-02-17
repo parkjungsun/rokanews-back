@@ -132,7 +132,6 @@ public class Member extends BaseEntity {
 
         this.presentStatus = presentStatus;
     }
-
     public void updatePositionAndNickname(String position, String nickname) {
         this.info.updatePosition(position);
         this.info.updateNickname(nickname);
