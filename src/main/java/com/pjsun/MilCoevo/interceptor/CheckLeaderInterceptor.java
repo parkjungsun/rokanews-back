@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Slf4j
@@ -19,18 +20,20 @@ public class CheckLeaderInterceptor implements HandlerInterceptor {
     @Autowired
     private MemberService memberService;
 
-    @Override
+    // TODO SuppressWarnings
     @SuppressWarnings("unchecked")
+    @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) {
 
-        // TODO SuppressWarnings
-        Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        if(pathVariables == null) {
+        Object pathVariables = request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        if(!(pathVariables instanceof LinkedHashMap)) {
             throw new RuntimeException();
         }
 
-        Long groupId = Long.valueOf(pathVariables.get("groupId"));
+        LinkedHashMap<String, Long> pathVariable = (LinkedHashMap<String, Long>) pathVariables;
+
+        Long groupId = pathVariable.get("groupId");
 
         Member member = memberService.getMemberByUserAndGroup(groupId);
         if (!member.getRank().equals(Rank.LEADER)) {
