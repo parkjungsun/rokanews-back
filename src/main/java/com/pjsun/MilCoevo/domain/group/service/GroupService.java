@@ -10,6 +10,7 @@ import com.pjsun.MilCoevo.domain.member.repository.MemberRepository;
 import com.pjsun.MilCoevo.domain.user.User;
 import com.pjsun.MilCoevo.domain.user.service.UserService;
 import com.pjsun.MilCoevo.exception.InactiveGroupException;
+import com.pjsun.MilCoevo.exception.MaxMemberException;
 import com.pjsun.MilCoevo.exception.NoExistGroupException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +44,11 @@ public class GroupService {
     }
 
     @Transactional
-    public Long registerGroup(String inviteCode, String position, String nickname) throws NoExistGroupException, InactiveGroupException {
+    public Long registerGroup(String inviteCode, String position, String nickname) throws MaxMemberException, NoExistGroupException, InactiveGroupException {
         User user = userService.getUserFromContext();
+        if (user.getMembers().size() > 5) {
+            throw new MaxMemberException();
+        }
         Group group = getGroupByInviteCode(inviteCode);
 
         Identification info = Identification.createIdentificationBuilder()

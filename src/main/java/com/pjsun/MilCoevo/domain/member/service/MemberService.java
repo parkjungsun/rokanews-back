@@ -10,6 +10,7 @@ import com.pjsun.MilCoevo.domain.user.service.UserService;
 import com.pjsun.MilCoevo.exception.InactiveGroupException;
 import com.pjsun.MilCoevo.exception.InvalidTokenException;
 import com.pjsun.MilCoevo.exception.NoExistGroupException;
+import com.pjsun.MilCoevo.exception.NoMemberException;
 import com.pjsun.MilCoevo.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +38,7 @@ public class MemberService {
     }
 
     public Member getMemberByUserAndGroup(Long groupId) throws InvalidTokenException {
-        log.debug("groupId = {}", groupId);
         User user = userService.getUserFromContext();
-        log.debug("groupId = {}", groupId);
 
         return memberRepository.searchMemberByUserIdAndGroupId(user.getId(), groupId)
                 .orElseThrow(NoExistGroupException::new);
@@ -47,7 +46,6 @@ public class MemberService {
 
     @Transactional
     public Long updateMember(Long groupId, String position, String nickname) throws InvalidTokenException {
-
         Member member = getMemberByUserAndGroup(groupId);
 
         member.updatePositionAndNickname(position, nickname);
@@ -57,7 +55,6 @@ public class MemberService {
 
     @Transactional
     public void removeMember(Long groupId) throws InvalidTokenException {
-
         Member member = getMemberByUserAndGroup(groupId);
 
         member.changeAvailability(false);
@@ -65,7 +62,8 @@ public class MemberService {
 
     @Transactional
     public Long updateMemberRank(Long memberId, Rank rank) {
-        Member member = memberRepository.getById(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NoMemberException::new);
 
         member.updateRank(rank);
 
@@ -74,7 +72,8 @@ public class MemberService {
 
     @Transactional
     public void banMember(Long memberId) {
-        Member member = memberRepository.getById(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NoMemberException::new);
 
         member.changeAvailability(false);
     }

@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum WorkScope {
 
     // 종일, 시간
-    CONTACT("대면"),
-    UNTACT("비대면");
+    ALL_DAY("종일"),
+    PART_TIME("시간");
 
-    private String description;
+    private final String description;
 }

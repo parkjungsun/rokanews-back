@@ -1,10 +1,8 @@
-package com.pjsun.MilCoevo.controller;
+package com.pjsun.MilCoevo.controllerAdvice;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.pjsun.MilCoevo.dto.ResponseDto;
-import com.pjsun.MilCoevo.exception.ForbiddenException;
-import com.pjsun.MilCoevo.exception.InvalidTokenException;
-import com.pjsun.MilCoevo.exception.NoTokenException;
+import com.pjsun.MilCoevo.exception.*;
 import com.querydsl.core.NonUniqueResultException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +33,12 @@ public class CommonControllerAdvice {
 
     @Value("${error.common.forbiddenException}")
     private String FORBIDDEN_EXCEPTION;
+
+    @Value("${error.common.illegalPathException}")
+    private String ILLEGAL_PATH_EXCEPTION;
+
+    @Value("${error.common.noPermissionException}")
+    private String NO_PERMISSION_EXCEPTION;
 
     @ExceptionHandler(NonUniqueResultException.class)
     public ResponseEntity<ResponseDto> nonUniqueEx(NonUniqueResultException e) {
@@ -72,7 +76,6 @@ public class CommonControllerAdvice {
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
-
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ResponseDto> invalidTokenEx(InvalidTokenException e) {
 
@@ -80,6 +83,15 @@ public class CommonControllerAdvice {
         ResponseDto error = new ResponseDto(INVALID_TOKEN_EXCEPTION, e.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(IllegalPathException.class)
+    public ResponseEntity<ResponseDto> illegalPathEx(IllegalPathException e) {
+
+        log.debug("Exception: illegalPathEx");
+        ResponseDto error = new ResponseDto(ILLEGAL_PATH_EXCEPTION, e.getMessage());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -91,4 +103,12 @@ public class CommonControllerAdvice {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NoPermissionException.class)
+    public ResponseEntity<ResponseDto> noPermissionEx(NoPermissionException e) {
+
+        log.debug("Exception: noPermissionEx");
+        ResponseDto error = new ResponseDto(NO_PERMISSION_EXCEPTION, "No Permission");
+
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
 }

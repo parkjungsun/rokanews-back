@@ -4,6 +4,7 @@ import com.pjsun.MilCoevo.domain.member.Member;
 import com.pjsun.MilCoevo.domain.member.Rank;
 import com.pjsun.MilCoevo.domain.member.service.MemberService;
 import com.pjsun.MilCoevo.exception.ForbiddenException;
+import com.pjsun.MilCoevo.exception.IllegalPathException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -28,7 +29,7 @@ public class CheckLeaderInterceptor implements HandlerInterceptor {
 
         Object pathVariables = request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         if(!(pathVariables instanceof LinkedHashMap)) {
-            throw new RuntimeException();
+            throw new IllegalPathException();
         }
 
         LinkedHashMap<String, Long> pathVariable = (LinkedHashMap<String, Long>) pathVariables;

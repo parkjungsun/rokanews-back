@@ -1,4 +1,4 @@
-package com.pjsun.MilCoevo.domain.group.controller;
+package com.pjsun.MilCoevo.controllerAdvice;
 
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import com.pjsun.MilCoevo.exception.InactiveGroupException;
@@ -36,6 +36,6 @@ public class GroupControllerAdvice {
         log.debug("Exception: noExistGroupEx");
         ResponseDto message = new ResponseDto(NO_EXIST_GROUP_EXCEPTION, "No Exist Group");
 
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 }

@@ -6,6 +6,7 @@ import com.pjsun.MilCoevo.domain.news.Keyword;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.repository.KeywordRepository;
 import com.pjsun.MilCoevo.domain.news.repository.NewsRepository;
+import com.pjsun.MilCoevo.exception.NoExistGroupException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,7 +35,7 @@ public class NewsService {
         Keyword key = newsRepository.searchGroupKeyword(groupId, keyword).orElse(null);
 
         if(key == null) {
-            Group group = groupRepository.getById(groupId);
+            Group group = groupRepository.findById(groupId).orElseThrow(NoExistGroupException::new);
             key = Keyword.createKeyword(keyword, group);
 
             keywordRepository.save(key);

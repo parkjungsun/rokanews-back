@@ -87,7 +87,7 @@ public class Absence extends BaseEntity {
         }
     }
 
-    @Builder(builderClassName = "createAbsenceBuilder", buildMethodName = "createAbsenceBuilder")
+    @Builder(builderClassName = "createAbsenceBuilder", builderMethodName = "createAbsenceBuilder")
     public static Absence createAbsence(
             String title, String content, Reason reason, LocalDate startDate,
             LocalDate endDate, Identification drafter, Group group) {
@@ -107,25 +107,13 @@ public class Absence extends BaseEntity {
     }
 
     /* 비즈니스 로직 */
-    private void decide(Identification sign, ProcessStatus processStatus) {
+    public void decide(Identification sign, ProcessStatus processStatus) {
         Assert.notNull(sign, () -> "[Absence] sign must not be null");
         Assert.notNull(processStatus, () -> "[Absence] processStatus must not be null");
 
         this.arbiter = sign;
         this.processStatus = processStatus;
         this.decisionDate = LocalDateTime.now();
-    }
-
-    public void withdraw(Identification sign) {
-        decide(sign, ProcessStatus.WITHDRAW);
-    }
-
-    public void approve(Identification sign) {
-        decide(sign, ProcessStatus.APPROVED);
-    }
-
-    public void reject(Identification sign) {
-        decide(sign, ProcessStatus.REJECTED);
     }
 
 }

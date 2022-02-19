@@ -83,7 +83,7 @@ public class Schedule extends BaseEntity {
         }
     }
 
-    @Builder(builderClassName = "createScheduleBuilder", buildMethodName = "createScheduleBuilder")
+    @Builder(builderClassName = "createScheduleBuilder", builderMethodName = "createScheduleBuilder")
     public static Schedule createSchedule(String title, String content, WorkScope workScope,
                                           LocalDateTime workDate, Identification drafter, Group group) {
         Assert.hasText(title, () -> "[Schedule] title must not be empty");
@@ -101,25 +101,13 @@ public class Schedule extends BaseEntity {
     }
 
     /* 비즈니스 로직 */
-    private void decide(Identification sign, ProcessStatus processStatus) {
+    public void decide(Identification sign, ProcessStatus processStatus) {
         Assert.notNull(sign, () -> "[Schedule] sign must not be null");
         Assert.notNull(processStatus, () -> "[Schedule] processStatus must not be null");
 
         this.arbiter = sign;
         this.processStatus = processStatus;
         this.decisionDate = LocalDateTime.now();
-    }
-
-    public void withdraw(Identification sign) {
-        decide(sign, ProcessStatus.WITHDRAW);
-    }
-
-    public void approve(Identification sign) {
-        decide(sign, ProcessStatus.APPROVED);
-    }
-
-    public void reject(Identification sign) {
-        decide(sign, ProcessStatus.REJECTED);
     }
 
 }

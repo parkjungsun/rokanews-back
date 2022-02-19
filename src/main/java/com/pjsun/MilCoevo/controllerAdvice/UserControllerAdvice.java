@@ -1,4 +1,4 @@
-package com.pjsun.MilCoevo.domain.user.controller;
+package com.pjsun.MilCoevo.controllerAdvice;
 
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import com.pjsun.MilCoevo.exception.DuplicateUserException;
