@@ -48,6 +48,7 @@ public class AbsenceRepositoryImpl implements AbsenceRepositoryCustom {
                         rearDate(searchCondition.getRearDate()),
                         processStatus(searchCondition.getProcessStatus())
                 )
+                .orderBy(absence.startDate.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -71,14 +72,14 @@ public class AbsenceRepositoryImpl implements AbsenceRepositoryCustom {
 
 
     private BooleanExpression frontDate(LocalDate frontDate) {
-        return frontDate != null ? schedule.workDate.goe(LocalDateTime.from(frontDate)) : null;
+        return frontDate != null ? absence.endDate.goe(frontDate) : null;
     }
 
     private BooleanExpression rearDate(LocalDate rearDate) {
-        return rearDate != null ? schedule.workDate.loe(LocalDateTime.from(rearDate)) : null;
+        return rearDate != null ? absence.startDate.loe(rearDate) : null;
     }
 
     private BooleanExpression processStatus(ProcessStatus processStatus) {
-        return processStatus != null ? schedule.processStatus.eq(processStatus) : null;
+        return processStatus != null ? absence.processStatus.eq(processStatus) : null;
     }
 }

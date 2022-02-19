@@ -66,6 +66,7 @@ public class ScheduleService {
         return scheduleRepository.searchSchedules(groupId, searchCondition, pageable);
     }
 
+    @Transactional
     public void updateSchedule(Long groupId, Long scheduleId, ProcessStatus processStatus) {
         Member member = memberService.getMemberByUserAndGroup(groupId);
 

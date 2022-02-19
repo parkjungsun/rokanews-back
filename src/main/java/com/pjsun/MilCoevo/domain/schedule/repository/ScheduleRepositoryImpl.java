@@ -48,6 +48,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
                         rearDate(searchCondition.getRearDate()),
                         processStatus(searchCondition.getProcessStatus())
                 )
+                .orderBy(schedule.workDate.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -35,7 +35,6 @@ public class Item {
     public void setPurchase(Purchase purchase) {
         this.purchase = purchase;
         purchase.getItems().add(this);
-
         purchase.addPurchasePrice(getItemPrice());
     }
 
@@ -51,7 +50,7 @@ public class Item {
         }
     }
 
-    @Builder(builderClassName = "createItemBuilder", buildMethodName = "createItemBuilder")
+    @Builder(builderClassName = "createItemBuilder", builderMethodName = "createItemBuilder")
     public static Item createItem(String itemName, Long price, Long quantity, Purchase purchase) {
         Assert.hasText(itemName, () -> "[Item] itemName must not be empty");
         Assert.notNull(price, () -> "[Item] price must not be null");

@@ -65,6 +65,7 @@ public class AbsenceService {
         return absenceRepository.searchAbsences(groupId, searchCondition, pageable);
     }
 
+    @Transactional
     public void updateAbsence(Long groupId, Long absenceId, ProcessStatus processStatus) {
         Member member = memberService.getMemberByUserAndGroup(groupId);
 

@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter @Setter
+@Getter
 @ToString
 @NoArgsConstructor
 public class ResponseDto {
@@ -59,15 +58,12 @@ public class ResponseDto {
     }
 
     private List<FieldErrorDto> addFieldErrors(BindingResult bindingResult) {
-        List<FieldErrorDto> collect = bindingResult.getFieldErrors()
-                .stream().map(e -> {
-                    FieldErrorDto error = new FieldErrorDto(e.getField(), e.getRejectedValue(), e.getDefaultMessage());
-                    return error;
-                }).collect(Collectors.toList());
-        return collect;
+        return bindingResult.getFieldErrors()
+                .stream().map(e -> new FieldErrorDto(e.getField(), e.getRejectedValue(), e.getDefaultMessage())
+                ).collect(Collectors.toList());
     }
 
-    @Getter @Setter
+    @Getter
     @NoArgsConstructor
     private static class FieldErrorDto {
 
