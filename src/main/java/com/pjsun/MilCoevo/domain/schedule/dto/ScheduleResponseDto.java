@@ -1,5 +1,6 @@
 package com.pjsun.MilCoevo.domain.schedule.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.pjsun.MilCoevo.domain.schedule.Schedule;
 import com.pjsun.MilCoevo.domain.schedule.WorkScope;
 import com.querydsl.core.annotations.QueryProjection;
@@ -16,40 +17,43 @@ public class ScheduleResponseDto {
 
     private Long id;
     private String title;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String content;
     private WorkScope workScope;
     private LocalDateTime workDate;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String drafterEmail;
     private String drafterPosition;
     private String drafterNickname;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterEmail;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterPosition;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterNickname;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime createdDate;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime decisionDate;
 
     @QueryProjection
     public ScheduleResponseDto(
-            Long id, String title, String content, WorkScope workScope,
-            LocalDateTime workDate, String drafterEmail, String drafterPosition,
-            String drafterNickname, String arbiterEmail, String arbiterPosition,
-            String arbiterNickname, LocalDateTime createdDate, LocalDateTime decisionDate) {
+            Long id, String title, WorkScope workScope,
+            LocalDateTime workDate, String drafterPosition,
+            String drafterNickname) {
         this.id = id;
         this.title = title;
-        this.content = content;
         this.workScope = workScope;
         this.workDate = workDate;
-        this.drafterEmail = drafterEmail;
         this.drafterPosition = drafterPosition;
         this.drafterNickname = drafterNickname;
-        this.arbiterEmail = arbiterEmail;
-        this.arbiterPosition = arbiterPosition;
-        this.arbiterNickname = arbiterNickname;
-        this.createdDate = createdDate;
-        this.decisionDate = decisionDate;
     }
 
     public ScheduleResponseDto(Schedule schedule) {

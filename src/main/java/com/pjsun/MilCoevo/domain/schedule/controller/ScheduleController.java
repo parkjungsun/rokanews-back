@@ -69,7 +69,6 @@ public class ScheduleController {
         Page<ScheduleResponseDto> schedules = scheduleService
                 .getSchedules(groupId, searchCondition, pageable);
 
-
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, schedules);
 
         return new ResponseEntity<>(data, HttpStatus.OK);

@@ -28,6 +28,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    @Override
     public Page<ScheduleResponseDto> searchSchedules(
             Long groupId, SearchScheduleDto searchCondition, Pageable pageable) {
 
@@ -35,17 +36,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
                 .select(new QScheduleResponseDto(
                         schedule.id,
                         schedule.title,
-                        schedule.content,
                         schedule.workScope,
                         schedule.workDate,
-                        schedule.drafter.email.as("drafterEmail"),
                         schedule.drafter.position.as("drafterPosition"),
-                        schedule.drafter.nickname.as("drafterNickname"),
-                        schedule.arbiter.email.as("arbiterEmail"),
-                        schedule.arbiter.position.as("arbiterPosition"),
-                        schedule.arbiter.nickname.as("arbiterNickname"),
-                        schedule.createdDate,
-                        schedule.decisionDate
+                        schedule.drafter.nickname.as("drafterNickname")
                 ))
                 .from(schedule)
                 .where(

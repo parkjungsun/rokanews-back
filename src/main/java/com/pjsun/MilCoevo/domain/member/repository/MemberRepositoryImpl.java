@@ -75,6 +75,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
         return new PageImpl<>(memberGroupDtos, pageable, total);
     }
 
+    @Override
     public Page<MemberGroupDto> searchMembersByGroupId(Long groupId, Pageable pageable) {
         List<MemberGroupDto> memberGroupDtos = queryFactory
                 .select(new QMemberGroupDto(
