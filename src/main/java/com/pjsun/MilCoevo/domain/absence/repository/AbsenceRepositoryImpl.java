@@ -70,7 +70,6 @@ public class AbsenceRepositoryImpl implements AbsenceRepositoryCustom {
         return new PageImpl<>(result, pageable, total);
     }
 
-
     private BooleanExpression frontDate(LocalDate frontDate) {
         return frontDate != null ? absence.endDate.goe(frontDate) : null;
     }

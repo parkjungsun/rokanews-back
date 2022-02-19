@@ -61,7 +61,7 @@ public class Comment extends BaseEntity {
         }
     }
 
-    @Builder(builderClassName = "createCommentBuilder", buildMethodName = "createCommentBuilder")
+    @Builder(builderClassName = "createCommentBuilder", builderMethodName = "createCommentBuilder")
     public static Comment createComment(String content, Identification writer, Notice notice) {
         Assert.hasText(content, () -> "[Comment] content must not be empty");
         Assert.notNull(writer, () -> "[Comment] writer must not be null");

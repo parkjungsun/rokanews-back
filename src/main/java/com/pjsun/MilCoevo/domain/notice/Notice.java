@@ -77,7 +77,7 @@ public class Notice extends BaseEntity {
         }
     }
 
-    @Builder(builderClassName = "createNoticeBuilder", buildMethodName = "createNoticeBuilder")
+    @Builder(builderClassName = "createNoticeBuilder", builderMethodName = "createNoticeBuilder")
     public static Notice createNotice(String title, String content,
                                       Identification writer, Group group) {
         Assert.hasText(title, () -> "[Notice] title must not be empty");
