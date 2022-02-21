@@ -67,7 +67,7 @@ public class AbsenceController {
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getAbsences(
             @PathVariable Long groupId,
-            @RequestBody SearchAbsenceDto searchCondition,
+            @ModelAttribute SearchAbsenceDto searchCondition,
             Pageable pageable) {
 
         Page<AbsenceResponseDto> absences = absenceService

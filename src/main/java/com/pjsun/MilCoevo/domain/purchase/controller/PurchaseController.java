@@ -62,7 +62,7 @@ public class PurchaseController {
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getPurchases(
             @PathVariable Long groupId,
-            @RequestBody SearchPurchaseDto searchCondition,
+            @ModelAttribute SearchPurchaseDto searchCondition,
             Pageable pageable) {
 
         PurchasesResponseDto purchases = purchaseService

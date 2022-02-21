@@ -1,14 +1,11 @@
 package com.pjsun.MilCoevo.domain.schedule.dto;
 
 import com.pjsun.MilCoevo.domain.ProcessStatus;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class SearchScheduleDto {

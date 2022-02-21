@@ -62,7 +62,7 @@ public class NoticeController {
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getNotices(
             @PathVariable Long groupId,
-            @RequestBody SearchNoticeDto searchCondition,
+            @ModelAttribute SearchNoticeDto searchCondition,
             Pageable pageable) {
 
         Page<NoticeResponseDto> notices = noticeService

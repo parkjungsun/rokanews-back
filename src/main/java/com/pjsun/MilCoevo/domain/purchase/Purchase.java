@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,8 @@ public class Purchase extends BaseEntity {
     private ProcessStatus processStatus;
 
     private Long purchasePrice;
+
+    private LocalDate purchaseDate;
 
     @Embedded
     @AttributeOverrides({
@@ -82,32 +85,36 @@ public class Purchase extends BaseEntity {
     /* 생성자 */
     @Builder(builderClassName = "of", builderMethodName = "of")
     private Purchase(String title, String content, Purpose purpose, Long purchasePrice,
-                     ProcessStatus processStatus, Identification drafter, Group group) {
+                     ProcessStatus processStatus, Identification drafter, Group group,
+                     LocalDate purchaseDate) {
         this.title = title;
         this.content = content;
         this.purpose = purpose;
         this.purchasePrice = purchasePrice;
         this.processStatus = processStatus;
         this.drafter = drafter;
+        this.purchaseDate = purchaseDate;
 
         if(!ObjectUtils.isEmpty(group)) {
             setGroup(group);
         }
     }
 
-    @Builder(builderClassName = "createPurchaseBuilder", buildMethodName = "createPurchaseBuilder")
+    @Builder(builderClassName = "createPurchaseBuilder", builderMethodName = "createPurchaseBuilder")
     public static Purchase createPurchase(String title, String content, Purpose purpose,
-                                          Identification drafter, Group group) {
+                                          Identification drafter, Group group, LocalDate purchaseDate) {
         Assert.hasText(title, () -> "[Purchase] title must not be empty");
         Assert.notNull(content, () -> "[Purchase] content must not be null");
         Assert.notNull(purpose, () -> "[Purchase] purpose must not be null");
         Assert.notNull(drafter, () -> "[Purchase] drafter must not be null");
+        Assert.notNull(purchaseDate, () -> "[Purchase] purchaseDate must not be null");
 
         return Purchase.of()
                 .title(title).content(content)
                 .purpose(purpose).purchasePrice(0L)
                 .processStatus(ProcessStatus.SUGGESTED)
                 .drafter(drafter).group(group)
+                .purchaseDate(purchaseDate)
                 .build();
     }
 
@@ -116,25 +123,13 @@ public class Purchase extends BaseEntity {
         this.purchasePrice += itemPrice;
     }
 
-    private void decide(Identification sign, ProcessStatus processStatus) {
+    public void decide(Identification sign, ProcessStatus processStatus) {
         Assert.notNull(sign, () -> "[Purchase] sign must not be null");
         Assert.notNull(processStatus, () -> "[Purchase] processStatus must not be null");
 
         this.arbiter = sign;
         this.processStatus = processStatus;
         this.decisionDate = LocalDateTime.now();
-    }
-
-    public void withdraw(Identification sign) {
-        decide(sign, ProcessStatus.WITHDRAW);
-    }
-
-    public void approve(Identification sign) {
-        decide(sign, ProcessStatus.APPROVED);
-    }
-
-    public void reject(Identification sign) {
-        decide(sign, ProcessStatus.REJECTED);
     }
 
 }

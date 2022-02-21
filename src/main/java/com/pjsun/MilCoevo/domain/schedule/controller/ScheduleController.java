@@ -63,7 +63,7 @@ public class ScheduleController {
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getSchedules(
             @PathVariable Long groupId,
-            @RequestBody SearchScheduleDto searchCondition,
+            @ModelAttribute SearchScheduleDto searchCondition,
             Pageable pageable) {
 
         Page<ScheduleResponseDto> schedules = scheduleService
