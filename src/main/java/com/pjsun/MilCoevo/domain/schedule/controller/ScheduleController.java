@@ -5,6 +5,7 @@ import com.pjsun.MilCoevo.domain.schedule.dto.ScheduleResponseDto;
 import com.pjsun.MilCoevo.domain.schedule.dto.ScheduleUpdateRequestDto;
 import com.pjsun.MilCoevo.domain.schedule.dto.SearchScheduleDto;
 import com.pjsun.MilCoevo.domain.schedule.service.ScheduleService;
+import com.pjsun.MilCoevo.domain.schedule.service.ScheduleServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

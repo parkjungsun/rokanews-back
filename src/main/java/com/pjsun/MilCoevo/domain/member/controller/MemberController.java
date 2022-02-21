@@ -5,15 +5,12 @@ import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
 import com.pjsun.MilCoevo.domain.member.dto.MemberResponseDto;
 import com.pjsun.MilCoevo.domain.member.dto.UpdateMemberRequestDto;
 import com.pjsun.MilCoevo.domain.member.service.MemberService;
-import com.pjsun.MilCoevo.domain.user.service.UserService;
+import com.pjsun.MilCoevo.domain.member.service.MemberServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import com.pjsun.MilCoevo.exception.InvalidTokenException;
-import com.pjsun.MilCoevo.exception.NoTokenException;
-import com.pjsun.MilCoevo.util.SecurityUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Slf4j

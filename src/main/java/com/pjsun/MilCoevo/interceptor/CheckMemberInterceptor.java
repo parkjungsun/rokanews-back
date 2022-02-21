@@ -2,21 +2,16 @@ package com.pjsun.MilCoevo.interceptor;
 
 import com.pjsun.MilCoevo.domain.member.Member;
 import com.pjsun.MilCoevo.domain.member.service.MemberService;
-import com.pjsun.MilCoevo.domain.user.User;
-import com.pjsun.MilCoevo.domain.user.service.UserService;
+import com.pjsun.MilCoevo.domain.member.service.MemberServiceImpl;
 import com.pjsun.MilCoevo.exception.IllegalPathException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Slf4j
 public class CheckMemberInterceptor implements HandlerInterceptor {

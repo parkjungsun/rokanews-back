@@ -1,15 +1,14 @@
 package com.pjsun.MilCoevo.domain.user.controller;
 
+import com.pjsun.MilCoevo.domain.user.service.UserService;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import com.pjsun.MilCoevo.domain.user.dto.TokenDto;
 import com.pjsun.MilCoevo.domain.user.dto.UserLoginRequestDto;
 import com.pjsun.MilCoevo.domain.user.dto.UserRegisterRequestDto;
-import com.pjsun.MilCoevo.domain.user.User;
 import com.pjsun.MilCoevo.exception.DuplicateUserException;
 import com.pjsun.MilCoevo.jwt.JwtFilter;
 import com.pjsun.MilCoevo.jwt.JwtTokenProvider;
-import com.pjsun.MilCoevo.domain.user.service.UserService;
-import io.swagger.annotations.Api;
+import com.pjsun.MilCoevo.domain.user.service.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -26,8 +24,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RequiredArgsConstructor

@@ -2,9 +2,9 @@ package com.pjsun.MilCoevo.domain.news.controller;
 
 import com.pjsun.MilCoevo.domain.news.dto.NewKeywordRequestDto;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
-import com.pjsun.MilCoevo.domain.news.dto.NewsResponseDto;
-import com.pjsun.MilCoevo.domain.news.service.NewsApi;
+import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
 import com.pjsun.MilCoevo.domain.news.service.NewsService;
+import com.pjsun.MilCoevo.domain.news.service.NewsServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +35,11 @@ public class NewsController {
 
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getGroupNews(
-            @PathVariable Long groupId, Pageable pageable) {
+            @PathVariable Long groupId,
+            @ModelAttribute SearchNewsDto searchCondition,
+            Pageable pageable) {
 
-        Page<NewsDto> news = newsService.getGroupNews(groupId, pageable);
+        Page<NewsDto> news = newsService.getGroupNews(groupId, searchCondition, pageable);
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, news);
 

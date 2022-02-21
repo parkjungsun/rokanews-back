@@ -2,8 +2,10 @@ package com.pjsun.MilCoevo.domain.group.controller;
 
 import com.pjsun.MilCoevo.domain.group.dto.*;
 import com.pjsun.MilCoevo.domain.group.service.GroupService;
+import com.pjsun.MilCoevo.domain.group.service.GroupServiceImpl;
 import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
 import com.pjsun.MilCoevo.domain.member.service.MemberService;
+import com.pjsun.MilCoevo.domain.member.service.MemberServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -125,9 +127,10 @@ public class GroupController {
     @GetMapping("/{groupId}/member")
     public ResponseEntity<ResponseDto> getMembers(
             @PathVariable Long groupId,
+            @ModelAttribute SearchGroupMemberDto searchCondition,
             Pageable pageable) {
 
-        Page<MemberGroupDto> members = groupService.getMembers(groupId, pageable);
+        Page<MemberGroupDto> members = groupService.getMembers(groupId, searchCondition, pageable);
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, members);
 

@@ -1,10 +1,8 @@
 package com.pjsun.MilCoevo.domain.notice.controller;
 
-import com.pjsun.MilCoevo.domain.absence.dto.AbsenceAddRequestDto;
-import com.pjsun.MilCoevo.domain.absence.dto.AbsenceResponseDto;
-import com.pjsun.MilCoevo.domain.absence.dto.AbsenceUpdateRequestDto;
 import com.pjsun.MilCoevo.domain.notice.dto.*;
 import com.pjsun.MilCoevo.domain.notice.service.NoticeService;
+import com.pjsun.MilCoevo.domain.notice.service.NoticeServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,22 +1,28 @@
 package com.pjsun.MilCoevo.domain.news.repository;
 
+import com.pjsun.MilCoevo.domain.ProcessStatus;
 import com.pjsun.MilCoevo.domain.group.QGroup;
 import com.pjsun.MilCoevo.domain.news.Keyword;
 import com.pjsun.MilCoevo.domain.news.QKeyword;
 import com.pjsun.MilCoevo.domain.news.QNews;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.dto.QNewsDto;
+import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 
 import static com.pjsun.MilCoevo.domain.group.QGroup.group;
 import static com.pjsun.MilCoevo.domain.news.QKeyword.keyword;
 import static com.pjsun.MilCoevo.domain.news.QNews.news;
+import static com.pjsun.MilCoevo.domain.purchase.QPurchase.purchase;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +35,8 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
     }
 
     @Override
-    public Page<NewsDto> searchGroupNews(Long groupId, Pageable pageable) {
-        List<NewsDto> newsDtos = queryFactory
+    public Page<NewsDto> searchGroupNews(Long groupId, SearchNewsDto searchCondition, Pageable pageable) {
+        List<NewsDto> result = queryFactory
                 .select(
                         new QNewsDto(
                                 news.id,
@@ -46,8 +52,10 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
                         JPAExpressions
                                 .select(keyword.content)
                                 .from(keyword)
-                                .where(keyword.group.id.eq(groupId))
-                ))
+                                .where(keyword.group.id.eq(groupId))),
+                        timeIndex(searchCondition.getTimeIndex())
+                )
+                .orderBy(news.pubDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -65,7 +73,7 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetchOne();
         if(total == null) total = 0L;
-        return new PageImpl<>(newsDtos, pageable, total);
+        return new PageImpl<>(result, pageable, total);
     }
 
     @Override
@@ -88,5 +96,9 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
                 ).fetchOne();
 
         return Optional.ofNullable(result);
+    }
+
+    private BooleanExpression timeIndex(String timeIndex) {
+        return StringUtils.hasText(timeIndex) ? news.index.eq(timeIndex) : null;
     }
 }

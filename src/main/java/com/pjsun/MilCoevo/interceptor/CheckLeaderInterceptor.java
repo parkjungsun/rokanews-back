@@ -3,6 +3,7 @@ package com.pjsun.MilCoevo.interceptor;
 import com.pjsun.MilCoevo.domain.member.Member;
 import com.pjsun.MilCoevo.domain.member.Rank;
 import com.pjsun.MilCoevo.domain.member.service.MemberService;
+import com.pjsun.MilCoevo.domain.member.service.MemberServiceImpl;
 import com.pjsun.MilCoevo.exception.ForbiddenException;
 import com.pjsun.MilCoevo.exception.IllegalPathException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Slf4j
 public class CheckLeaderInterceptor implements HandlerInterceptor {
