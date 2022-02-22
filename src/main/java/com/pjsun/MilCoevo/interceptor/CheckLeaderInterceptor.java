@@ -32,9 +32,9 @@ public class CheckLeaderInterceptor implements HandlerInterceptor {
             throw new IllegalPathException();
         }
 
-        LinkedHashMap<String, Long> pathVariable = (LinkedHashMap<String, Long>) pathVariables;
+        LinkedHashMap<String, String> pathVariable = (LinkedHashMap<String, String>) pathVariables;
 
-        Long groupId = pathVariable.get("groupId");
+        Long groupId = Long.parseLong(pathVariable.get("groupId"));
 
         Member member = memberService.getMemberByUserAndGroup(groupId);
         if (!member.getRank().equals(Rank.LEADER)) {

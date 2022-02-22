@@ -131,6 +131,7 @@ public class GroupController {
             Pageable pageable) {
 
         Page<MemberGroupDto> members = groupService.getMembers(groupId, searchCondition, pageable);
+        log.debug("searchName= {}", searchCondition.getSearchName());
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, members);
 
@@ -140,6 +141,7 @@ public class GroupController {
     @PatchMapping("/{groupId}/member/{memberId}")
     public ResponseEntity<ResponseDto> updateMemberRank(
             @PathVariable Long memberId,
+            @PathVariable Long groupId,
             @Validated @RequestBody UpdateMemberRankDto rankDto,
             BindingResult bindingResult) {
 
@@ -148,7 +150,7 @@ public class GroupController {
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
-        Long id = memberService.updateMemberRank(memberId, rankDto.getRank());
+        Long id = memberService.updateMemberRank(groupId, memberId, rankDto.getRank());
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, id);
 
@@ -157,9 +159,10 @@ public class GroupController {
 
     @DeleteMapping("/{groupId}/member/{memberId}")
     public ResponseEntity<ResponseDto> banMember(
+            @PathVariable Long groupId,
             @PathVariable Long memberId) {
 
-        memberService.banMember(memberId);
+        memberService.banMember(groupId, memberId);
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE);
 

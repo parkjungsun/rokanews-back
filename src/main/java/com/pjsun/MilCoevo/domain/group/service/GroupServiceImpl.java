@@ -6,6 +6,7 @@ import com.pjsun.MilCoevo.domain.group.dto.SearchGroupMemberDto;
 import com.pjsun.MilCoevo.domain.group.repository.GroupRepository;
 import com.pjsun.MilCoevo.domain.member.Identification;
 import com.pjsun.MilCoevo.domain.member.Member;
+import com.pjsun.MilCoevo.domain.member.Rank;
 import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
 import com.pjsun.MilCoevo.domain.member.repository.MemberRepository;
 import com.pjsun.MilCoevo.domain.user.User;
@@ -46,7 +47,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public Long registerGroup(String inviteCode, String position, String nickname) throws MaxMemberException, NoExistGroupException, InactiveGroupException {
         User user = userService.getUserFromContext();
-        if (user.getMembers().size() > 5) {
+        if (user.getMembers().stream().mapToInt(member -> member.isAvailable() ? 1 : 0).sum() >= 5) {
             throw new MaxMemberException();
         }
         Group group = getGroupByInviteCode(inviteCode);
@@ -60,8 +61,11 @@ public class GroupServiceImpl implements GroupService {
             log.debug("create new member");
             member = Member.createToMemberBuilder().info(info).user(user).group(group).build();
             memberRepository.save(member);
+        } else {
+            member.changeAvailability(true);
+            member.updateRank(Rank.MEMBER);
+            member.updatePositionAndNickname(position, nickname);
         }
-        member.changeAvailability(true);
 
         return member.getId();
     }
@@ -69,6 +73,9 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public Long createGroup(String groupName, String position, String nickname) {
         User user = userService.getUserFromContext();
+        if (user.getMembers().stream().mapToInt(member -> member.isAvailable() ? 1 : 0).sum() >= 5) {
+            throw new MaxMemberException();
+        }
         Group group = Group.createGroupBuilder(groupName);
 
         Identification info = Identification.createIdentificationBuilder()
@@ -109,5 +116,4 @@ public class GroupServiceImpl implements GroupService {
     public Page<MemberGroupDto> getMembers(Long groupId, SearchGroupMemberDto searchCondition, Pageable pageable) {
         return memberRepository.searchMembersByGroupId(groupId, searchCondition, pageable);
     }
-
 }

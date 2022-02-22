@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 
@@ -67,9 +68,11 @@ public class ScheduleResponseDto {
         this.drafterPosition = schedule.getDrafter().getPosition();
         this.drafterNickname = schedule.getDrafter().getNickname();
 
-        this.arbiterEmail = schedule.getArbiter().getEmail();
-        this.arbiterPosition = schedule.getArbiter().getPosition();
-        this.arbiterNickname = schedule.getArbiter().getNickname();
+        if(!ObjectUtils.isEmpty(schedule.getArbiter())) {
+            this.arbiterEmail = schedule.getArbiter().getEmail();
+            this.arbiterPosition = schedule.getArbiter().getPosition();
+            this.arbiterNickname = schedule.getArbiter().getNickname();
+        }
 
         this.createdDate = schedule.getCreatedDate();
         this.decisionDate = schedule.getDecisionDate();

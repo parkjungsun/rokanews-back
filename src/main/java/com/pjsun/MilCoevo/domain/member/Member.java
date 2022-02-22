@@ -79,7 +79,7 @@ public class Member extends BaseEntity {
 
     @Builder(builderClassName = "createToMemberBuilder", builderMethodName = "createToMemberBuilder")
     public static Member createToMember(Identification info, User user, Group group) {
-        return createMember(info, user, group, Rank.OTHERS);
+        return createMember(info, user, group, Rank.MEMBER);
     }
 
     @Builder(builderClassName = "createToLeaderBuilder", builderMethodName = "createToLeaderBuilder")

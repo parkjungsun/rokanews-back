@@ -36,8 +36,13 @@ public class MemberServiceImpl implements MemberService {
     public Member getMemberByUserAndGroup(Long groupId) throws InvalidTokenException {
         User user = userService.getUserFromContext();
 
-        return memberRepository.searchMemberByUserIdAndGroupId(user.getId(), groupId)
+        Member member = memberRepository.searchMemberByUserIdAndGroupId(user.getId(), groupId)
                 .orElseThrow(NoExistGroupException::new);
+
+        if(!member.isAvailable()) {
+            throw new NoExistGroupException();
+        }
+        return member;
     }
 
     @Transactional
@@ -54,12 +59,17 @@ public class MemberServiceImpl implements MemberService {
         Member member = getMemberByUserAndGroup(groupId);
 
         member.changeAvailability(false);
+        member.updateRank(Rank.OTHERS);
     }
 
     @Transactional
-    public Long updateMemberRank(Long memberId, Rank rank) {
+    public Long updateMemberRank(Long groupId, Long memberId, Rank rank) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoMemberException::new);
+
+        if(!member.getGroup().getId().equals(groupId)) {
+            throw new NoMemberException();
+        }
 
         member.updateRank(rank);
 
@@ -67,10 +77,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
-    public void banMember(Long memberId) {
+    public void banMember(Long groupId, Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoMemberException::new);
 
+        if(!member.getGroup().getId().equals(groupId)) {
+            throw new NoMemberException();
+        }
+
         member.changeAvailability(false);
+        member.updateRank(Rank.OTHERS);
     }
+
 }

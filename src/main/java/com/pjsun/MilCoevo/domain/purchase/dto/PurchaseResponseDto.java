@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -76,9 +77,11 @@ public class PurchaseResponseDto {
         this.drafterPosition = purchase.getDrafter().getPosition();
         this.drafterNickname = purchase.getDrafter().getNickname();
 
-        this.arbiterEmail = purchase.getArbiter().getEmail();
-        this.arbiterPosition = purchase.getArbiter().getPosition();
-        this.arbiterNickname = purchase.getArbiter().getNickname();
+        if(!ObjectUtils.isEmpty(purchase.getArbiter())) {
+            this.arbiterEmail = purchase.getArbiter().getEmail();
+            this.arbiterPosition = purchase.getArbiter().getPosition();
+            this.arbiterNickname = purchase.getArbiter().getNickname();
+        }
 
         this.createdDate = purchase.getCreatedDate();
         this.decisionDate = purchase.getDecisionDate();

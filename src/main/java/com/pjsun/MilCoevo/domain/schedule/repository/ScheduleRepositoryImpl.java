@@ -5,6 +5,7 @@ import com.pjsun.MilCoevo.domain.schedule.QSchedule;
 import com.pjsun.MilCoevo.domain.schedule.dto.QScheduleResponseDto;
 import com.pjsun.MilCoevo.domain.schedule.dto.ScheduleResponseDto;
 import com.pjsun.MilCoevo.domain.schedule.dto.SearchScheduleDto;
+import com.pjsun.MilCoevo.util.DateUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -71,11 +72,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
     }
 
     private BooleanExpression frontDate(LocalDate frontDate) {
-        return frontDate != null ? schedule.workDate.goe(LocalDateTime.from(frontDate)) : null;
+        return frontDate != null ? schedule.workDate.goe(DateUtil.from(frontDate)) : null;
     }
 
     private BooleanExpression rearDate(LocalDate rearDate) {
-        return rearDate != null ? schedule.workDate.loe(LocalDateTime.from(rearDate)) : null;
+        return rearDate != null ? schedule.workDate.loe(DateUtil.from(rearDate)) : null;
     }
 
     private BooleanExpression processStatus(ProcessStatus processStatus) {

@@ -1,5 +1,6 @@
 package com.pjsun.MilCoevo.domain.schedule.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pjsun.MilCoevo.domain.schedule.WorkScope;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class ScheduleAddRequestDto {
     private WorkScope workScope;
 
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime workDate;
 
 }

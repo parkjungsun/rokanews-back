@@ -2,6 +2,7 @@ package com.pjsun.MilCoevo.domain.absence.dto;
 
 import com.pjsun.MilCoevo.domain.ProcessStatus;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -10,7 +11,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class SearchAbsenceDto {
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate frontDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate rearDate;
+
     private ProcessStatus processStatus;
 }

@@ -14,10 +14,10 @@ public interface MemberService {
 
     Long updateMember(Long groupId, String position, String nickname);
 
-    Long updateMemberRank(Long memberId, Rank rank);
+    Long updateMemberRank(Long groupId, Long memberId, Rank rank);
 
     void removeMember(Long groupId);
 
-    void banMember(Long memberId);
+    void banMember(Long groupId, Long memberId);
 
 }

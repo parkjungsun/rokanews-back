@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -72,10 +73,11 @@ public class AbsenceResponseDto {
         this.drafterPosition = absence.getDrafter().getPosition();
         this.drafterNickname = absence.getDrafter().getNickname();
 
-        this.arbiterEmail = absence.getArbiter().getEmail();
-        this.arbiterPosition = absence.getArbiter().getPosition();
-        this.arbiterNickname = absence.getArbiter().getNickname();
-
+        if(!ObjectUtils.isEmpty(absence.getArbiter())) {
+            this.arbiterEmail = absence.getArbiter().getEmail();
+            this.arbiterPosition = absence.getArbiter().getPosition();
+            this.arbiterNickname = absence.getArbiter().getNickname();
+        }
         this.createdDate = absence.getCreatedDate();
         this.decisionDate = absence.getDecisionDate();
     }
