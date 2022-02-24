@@ -113,6 +113,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     }
 
     private BooleanExpression searchName(String searchName) {
-        return StringUtils.hasText(searchName) ? member.info.nickname.eq(searchName) : null;
+        return StringUtils.hasText(searchName) ? member.info.nickname.contains(searchName) : null;
     }
 }

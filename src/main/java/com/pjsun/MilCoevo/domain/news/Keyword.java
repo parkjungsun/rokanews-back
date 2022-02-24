@@ -44,6 +44,7 @@ public class Keyword extends BaseEntity {
         }
     }
 
+    @Builder(builderClassName = "createKeywordBuilder", builderMethodName = "createKeywordBuilder")
     public static Keyword createKeyword(String content, Group group) {
         Assert.hasText(content, () -> "[Keyword] content must not be empty");
 

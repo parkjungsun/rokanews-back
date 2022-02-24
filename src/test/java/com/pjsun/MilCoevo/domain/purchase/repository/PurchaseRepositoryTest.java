@@ -8,6 +8,7 @@ import com.pjsun.MilCoevo.domain.purchase.Item;
 import com.pjsun.MilCoevo.domain.purchase.Purchase;
 import com.pjsun.MilCoevo.domain.purchase.Purpose;
 import com.pjsun.MilCoevo.domain.purchase.dto.PurchaseResponseDto;
+import com.pjsun.MilCoevo.domain.purchase.dto.PurchasesResponseDto;
 import com.pjsun.MilCoevo.domain.purchase.dto.SearchPurchaseDto;
 import com.pjsun.MilCoevo.domain.schedule.dto.SearchScheduleDto;
 import org.assertj.core.api.Assertions;
@@ -99,9 +100,11 @@ class PurchaseRepositoryTest {
                 ProcessStatus.SUGGESTED);
 
         //when
-            purchaseRepository
+        PurchasesResponseDto purchaseStatistics = purchaseRepository
                 .searchPurchaseStatistics(group.getId(), searchCondition);
 
         //then
+        assertThat(purchaseStatistics.getTotal()).isEqualTo(18000);
+        assertThat(purchaseStatistics.getEtc()).isEqualTo(18000);
     }
 }
