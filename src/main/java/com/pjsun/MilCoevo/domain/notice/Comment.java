@@ -14,6 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Slf4j
 @Entity @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comments")
 @ToString(exclude = {"notice"})

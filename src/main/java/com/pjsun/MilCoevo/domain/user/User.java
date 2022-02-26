@@ -14,6 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Entity @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 @ToString(exclude = {"members"})

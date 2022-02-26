@@ -1,9 +1,6 @@
 package com.pjsun.MilCoevo.domain.member;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 

@@ -17,6 +17,7 @@ import static javax.persistence.FetchType.*;
 
 @Slf4j
 @Entity @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "members")
 @ToString(exclude = {"user", "group"})

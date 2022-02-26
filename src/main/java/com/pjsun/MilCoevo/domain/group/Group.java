@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @Slf4j
 @Entity @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "groups")
 @ToString(exclude = {
@@ -126,8 +127,7 @@ public class Group extends BaseEntity {
     }
 
     public void updateInviteCode() {
-        String code = createInviteCode();
-        this.inviteCode = code;
+        this.inviteCode = createInviteCode();
     }
 
     public void updateGroupName(String groupName) {
