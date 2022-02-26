@@ -1,6 +1,7 @@
 package com.pjsun.MilCoevo.domain.group.repository;
 
 import com.pjsun.MilCoevo.domain.group.Group;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@DataJpaTest
-class GroupRepositoryTest {
+class GroupRepositoryTest extends RepositoryTest {
 
     @Autowired
     GroupRepository groupRepository;

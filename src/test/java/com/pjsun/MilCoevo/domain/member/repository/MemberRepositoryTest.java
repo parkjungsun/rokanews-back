@@ -8,6 +8,7 @@ import com.pjsun.MilCoevo.domain.member.Member;
 import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
 import com.pjsun.MilCoevo.domain.user.User;
 import com.pjsun.MilCoevo.domain.user.repository.UserRepository;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +21,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-@DataJpaTest
-class MemberRepositoryTest {
+
+class MemberRepositoryTest extends RepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;

@@ -1,11 +1,11 @@
 package com.pjsun.MilCoevo;
 
+import com.pjsun.MilCoevo.test.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class MilCoevoApplicationTests {
+class MilCoevoApplicationTests extends IntegrationTest {
 
 	@Test
 	void contextLoads() {

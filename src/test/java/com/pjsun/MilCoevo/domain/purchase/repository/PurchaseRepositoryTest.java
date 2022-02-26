@@ -11,6 +11,7 @@ import com.pjsun.MilCoevo.domain.purchase.dto.PurchaseResponseDto;
 import com.pjsun.MilCoevo.domain.purchase.dto.PurchasesResponseDto;
 import com.pjsun.MilCoevo.domain.purchase.dto.SearchPurchaseDto;
 import com.pjsun.MilCoevo.domain.schedule.dto.SearchScheduleDto;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +27,8 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-class PurchaseRepositoryTest {
+
+class PurchaseRepositoryTest extends RepositoryTest {
 
     @Autowired
     PurchaseRepository purchaseRepository;

@@ -11,6 +11,7 @@ import com.pjsun.MilCoevo.domain.purchase.Purchase;
 import com.pjsun.MilCoevo.domain.purchase.Purpose;
 import com.pjsun.MilCoevo.domain.purchase.repository.ItemRepository;
 import com.pjsun.MilCoevo.domain.purchase.repository.PurchaseRepository;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +27,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-class NoticeRepositoryTest {
+class NoticeRepositoryTest extends RepositoryTest {
 
     @Autowired
     NoticeRepository noticeRepository;

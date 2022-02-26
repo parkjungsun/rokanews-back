@@ -8,6 +8,7 @@ import com.pjsun.MilCoevo.domain.absence.dto.SearchAbsenceDto;
 import com.pjsun.MilCoevo.domain.group.Group;
 import com.pjsun.MilCoevo.domain.group.repository.GroupRepository;
 import com.pjsun.MilCoevo.domain.member.Identification;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-class AbsenceRepositoryTest {
+class AbsenceRepositoryTest extends RepositoryTest {
 
     @Autowired
     AbsenceRepository absenceRepository;

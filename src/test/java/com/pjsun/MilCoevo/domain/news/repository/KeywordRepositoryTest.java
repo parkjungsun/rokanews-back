@@ -3,6 +3,7 @@ package com.pjsun.MilCoevo.domain.news.repository;
 import com.pjsun.MilCoevo.domain.group.Group;
 import com.pjsun.MilCoevo.domain.group.repository.GroupRepository;
 import com.pjsun.MilCoevo.domain.news.Keyword;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-class KeywordRepositoryTest {
+class KeywordRepositoryTest extends RepositoryTest {
 
     @Autowired
     KeywordRepository keywordRepository;

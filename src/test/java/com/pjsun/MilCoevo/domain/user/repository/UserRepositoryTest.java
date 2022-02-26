@@ -1,6 +1,7 @@
 package com.pjsun.MilCoevo.domain.user.repository;
 
 import com.pjsun.MilCoevo.domain.user.User;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DataJpaTest
-class UserRepositoryTest {
+class UserRepositoryTest extends RepositoryTest {
 
     @Autowired
     UserRepository userRepository;

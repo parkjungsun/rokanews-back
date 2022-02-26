@@ -8,6 +8,7 @@ import com.pjsun.MilCoevo.domain.schedule.Schedule;
 import com.pjsun.MilCoevo.domain.schedule.WorkScope;
 import com.pjsun.MilCoevo.domain.schedule.dto.ScheduleResponseDto;
 import com.pjsun.MilCoevo.domain.schedule.dto.SearchScheduleDto;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +25,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-class ScheduleRepositoryTest {
+class ScheduleRepositoryTest extends RepositoryTest {
 
     @Autowired
     ScheduleRepository scheduleRepository;

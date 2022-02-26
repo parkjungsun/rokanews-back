@@ -6,6 +6,7 @@ import com.pjsun.MilCoevo.domain.news.Keyword;
 import com.pjsun.MilCoevo.domain.news.News;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
+import com.pjsun.MilCoevo.test.RepositoryTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +25,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@DataJpaTest
-class NewsRepositoryTest {
+class NewsRepositoryTest extends RepositoryTest {
 
     @Autowired
     NewsRepository newsRepository;
