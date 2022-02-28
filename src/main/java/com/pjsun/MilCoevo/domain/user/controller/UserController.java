@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -43,23 +44,16 @@ public class UserController {
 
     @ApiOperation(value = "로그인", notes = "이메일, 패스워드 기반 로그인")
     @PostMapping("/login")
-    public ResponseEntity<ResponseDto> login(
-            @Validated @RequestBody UserLoginRequestDto requestDto,
-            BindingResult bindingResult) throws UsernameNotFoundException {
+    public TokenDto login(
+            @Validated @RequestBody UserLoginRequestDto requestDto
+            ) throws UsernameNotFoundException {
 
-        if(bindingResult.hasErrors()) {
-            ResponseDto error = new ResponseDto(BINDING_ERROR_EXCEPTION, bindingResult);
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
-        String jwt = loginByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword());
+        TokenDto jwt = loginByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, new TokenDto(jwt));
-
-        return new ResponseEntity<>(data, httpHeaders, HttpStatus.OK);
+        return jwt;
     }
 
     @ApiOperation(value = "회원가입", notes = "이메일, 패스워드 기반 회원가입")
@@ -80,7 +74,7 @@ public class UserController {
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
-    private String loginByEmailAndPassword(String email, String password) throws UsernameNotFoundException {
+    private TokenDto loginByEmailAndPassword(String email, String password) throws UsernameNotFoundException {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
         /* authenticate 실행시 UserDetailsService -> loadUserByUsername 실행됨 */

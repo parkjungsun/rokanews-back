@@ -40,6 +40,9 @@ public class CommonControllerAdvice {
     @Value("${error.common.noPermissionException}")
     private String NO_PERMISSION_EXCEPTION;
 
+    @Value("${error.common.oAuthProviderMissMatchException}")
+    private String OAUTH_PROVIDER_MISS_MATCH_EXCEPTION;
+
     @ExceptionHandler(NonUniqueResultException.class)
     public ResponseEntity<ResponseDto> nonUniqueEx(NonUniqueResultException e) {
 
@@ -110,5 +113,14 @@ public class CommonControllerAdvice {
         ResponseDto error = new ResponseDto(NO_PERMISSION_EXCEPTION, "No Permission");
 
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(OAuthProviderMissMatchException.class)
+    public ResponseEntity<ResponseDto> oAuthProviderMissMatchEx(OAuthProviderMissMatchException e) {
+
+        log.debug("Exception: oAuthProviderMissMatchEx");
+        ResponseDto error = new ResponseDto(OAUTH_PROVIDER_MISS_MATCH_EXCEPTION, e.getMessage());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

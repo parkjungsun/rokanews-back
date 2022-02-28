@@ -24,6 +24,10 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ProviderType providerType;
+
     @Column(length = 50, unique = true, nullable = false)
     private String email;
 
@@ -50,29 +54,36 @@ public class User extends BaseEntity {
 
     /* 생성자 */
     @Builder(builderClassName = "of", builderMethodName = "of")
-    private User(String email, String password, Role role, boolean isAvailable) {
+    private User(String email, String password, Role role, boolean isAvailable, ProviderType providerType) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.isAvailable = isAvailable;
+        this.providerType = providerType;
     }
 
     @Builder(builderClassName = "createByUserBuilder", builderMethodName = "createByUserBuilder")
     public static User createByUser(String email, String password) {
-        return createUser(email, password, Role.ROLE_USER);
+        return createUser(email, password, Role.ROLE_USER, ProviderType.NONE);
     }
 
     @Builder(builderClassName = "createByAdminBuilder", builderMethodName = "createByAdminBuilder")
     public static User createByAdmin(String email, String password) {
-        return createUser(email, password, Role.ROLE_ADMIN);
+        return createUser(email, password, Role.ROLE_ADMIN, ProviderType.NONE);
     }
 
-    private static User createUser(String email, String password, Role role) {
+    @Builder(builderClassName = "createByOAuthBuilder", builderMethodName = "createByOAuthBuilder")
+    public static User createByOAuth(String email, String password, ProviderType providerType) {
+        return createUser(email, password, Role.ROLE_USER, providerType);
+    }
+
+    private static User createUser(String email, String password, Role role, ProviderType providerType) {
         Assert.hasText(email, () -> "[User] email must not be empty");
         Assert.notNull(role, () -> "[User] role must not be null");
 
         return User.of()
-                .email(email).password(password).role(role)
+                .email(email).password(password)
+                .role(role).providerType(providerType)
                 .isAvailable(true)
                 .build();
     }

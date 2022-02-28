@@ -1,47 +1,85 @@
 package com.pjsun.MilCoevo.oauth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pjsun.MilCoevo.config.AppProperties;
 import com.pjsun.MilCoevo.domain.user.dto.TokenDto;
 import com.pjsun.MilCoevo.jwt.JwtTokenProvider;
+import com.pjsun.MilCoevo.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
+public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private final JwtTokenProvider tokenProvider;
-    private final ObjectMapper objectMapper;
+    private final AppProperties appProperties;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-
+    // OAuth 성공시
+    // Token + uri 생성 후 인증요청 쿠키를 비우고 redirect
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) throws IOException {
 
-        TokenDto token = tokenProvider.createToken(authentication);
+        String targetUrl = determineTargetUrl(request, response, authentication);
 
-        writeTokenResponse(response, token);
+        if (response.isCommitted()) {
+            log.debug("response has already bean committed. unable to redirect to {}", targetUrl);
+            return;
+        }
+        clearAuthenticationAttributes(request, response);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    private void writeTokenResponse(HttpServletResponse response, TokenDto token) throws IOException{
+    // token
+    protected String determineTargetUrl(
+            HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
-        response.addHeader("Auth", "Bearer " + token.getAccessToken());
-        response.addHeader("Refresh", "Bearer " + token.getRefreshToken());
-        response.setContentType("application/json;charset=UTF-8");
+        Optional<String> redirectUri = CookieUtils
+                .getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
+                .map(Cookie::getValue);
 
-        PrintWriter writer = response.getWriter();
-        writer.println(objectMapper.writeValueAsString(token));
-        writer.flush();
+        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+            throw new RuntimeException("Redirect Uri Error!");
+        }
+
+        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        TokenDto token = tokenProvider.createToken(authentication);
+        return UriComponentsBuilder.fromUriString(targetUrl)
+                .queryParam("token", token.getAccessToken())
+                .build().toString();
+    }
+
+    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
+        super.clearAuthenticationAttributes(request);
+        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+    }
+
+    private boolean isAuthorizedRedirectUri(String uri) {
+        URI clientRedirectUri = URI.create(uri);
+        return appProperties.getOAuth2().getAuthorizedRedirectUris()
+                .stream()
+                .anyMatch(authorizedRedirectUri -> {
+                    URI authorizedURI = URI.create(authorizedRedirectUri);
+                    return authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+                            && authorizedURI.getPort() == clientRedirectUri.getPort();
+                });
     }
 }

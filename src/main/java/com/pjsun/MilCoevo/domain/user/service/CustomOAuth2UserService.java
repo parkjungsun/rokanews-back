@@ -1,5 +1,6 @@
 package com.pjsun.MilCoevo.domain.user.service;
 
+import com.pjsun.MilCoevo.domain.user.ProviderType;
 import com.pjsun.MilCoevo.domain.user.User;
 import com.pjsun.MilCoevo.domain.user.dto.OAuthAttributes;
 import com.pjsun.MilCoevo.domain.user.repository.UserRepository;
@@ -29,13 +30,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         // 로그인 진행중인 서비스를 구분하는 코드
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        ProviderType providerType = ProviderType
+                .valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
+
         // Oauth2 로그인 진행시 키가 되는 필드 값
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
         OAuthAttributes attributes = OAuthAttributes
-                .of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+                .of(providerType, userNameAttributeName, oAuth2User.getAttributes());
 
         User user = saveOrUpdate(attributes);
 

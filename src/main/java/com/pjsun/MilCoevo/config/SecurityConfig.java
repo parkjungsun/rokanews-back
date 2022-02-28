@@ -5,6 +5,8 @@ import com.pjsun.MilCoevo.jwt.JwtAccessDeniedHandler;
 import com.pjsun.MilCoevo.jwt.JwtAuthenticationEntryPoint;
 import com.pjsun.MilCoevo.jwt.JwtSecurityConfig;
 import com.pjsun.MilCoevo.jwt.JwtTokenProvider;
+import com.pjsun.MilCoevo.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.pjsun.MilCoevo.oauth.OAuth2FailureHandler;
 import com.pjsun.MilCoevo.oauth.OAuth2SuccessHandler;
 import lombok.ToString;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 /*
 * Spring Security Filter Chain 사용
@@ -29,6 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2SuccessHandler successHandler;
+    private final OAuth2FailureHandler failureHandler;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -37,12 +42,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public SecurityConfig(
             CustomOAuth2UserService customOAuth2UserService,
             OAuth2SuccessHandler successHandler,
+            OAuth2FailureHandler failureHandler,
+            HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository,
+
             JwtTokenProvider jwtTokenProvider,
             JwtAccessDeniedHandler jwtAccessDeniedHandler,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint
     ) {
         this.customOAuth2UserService = customOAuth2UserService;
         this.successHandler = successHandler;
+        this.failureHandler = failureHandler;
+        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
@@ -67,34 +77,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .cors().and()
                 .csrf().disable()
+                .httpBasic().disable()
+                .formLogin().disable()
+
+                .headers()
+                    .frameOptions()
+                    .sameOrigin()
+                    .and()
+
+                .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
 
                 .exceptionHandling()
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-
                 .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
 
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-                .and()
                 .authorizeRequests()
-                .antMatchers("/token/**").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/api/user/register").permitAll()
-                .antMatchers("/api/user/login").permitAll()
-                .antMatchers("/api/**").hasRole("USER")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                    .antMatchers("/token/**").permitAll()
+                    .antMatchers("/swagger-resources/**").permitAll()
+                    .antMatchers("/api/user/register").permitAll()
+                    .antMatchers("/api/user/login").permitAll()
+                    .antMatchers("/oauth2/**").permitAll()
+                    .antMatchers("/login/**").permitAll()
+                    .antMatchers("/api/**").hasRole("USER")
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated()
+                    .and()
 
-                .and()
-                .oauth2Login().successHandler(successHandler)
-                .userInfoEndpoint().userService(customOAuth2UserService);
+                .oauth2Login()
+                    .authorizationEndpoint()
+                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
+                    .baseUri("/oauth2/authorization")
+                    .and()
+
+                    .redirectionEndpoint()
+                    .baseUri("/**/oauth2/code/**")
+                    .and()
+
+                    .userInfoEndpoint()
+                    .userService(customOAuth2UserService)
+                    .and()
+
+                    .successHandler(successHandler)
+                    .failureHandler((AuthenticationFailureHandler) failureHandler);
 
         httpSecurity
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
