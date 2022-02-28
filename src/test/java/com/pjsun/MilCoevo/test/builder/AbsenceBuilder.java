@@ -4,6 +4,7 @@ import com.pjsun.MilCoevo.domain.ProcessStatus;
 import com.pjsun.MilCoevo.domain.absence.Absence;
 import com.pjsun.MilCoevo.domain.absence.Reason;
 import com.pjsun.MilCoevo.domain.member.Identification;
+import com.pjsun.MilCoevo.test.builder.IdentificationBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

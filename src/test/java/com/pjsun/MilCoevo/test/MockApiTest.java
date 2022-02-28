@@ -1,7 +1,6 @@
 package com.pjsun.MilCoevo.test;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
 
-@WebMvcTest
 public class MockApiTest {
 }

@@ -4,10 +4,12 @@ import antlr.Token;
 import com.pjsun.MilCoevo.exception.InvalidTokenException;
 import com.pjsun.MilCoevo.exception.NoTokenException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,7 @@ import java.io.IOException;
 * 토큰 인증정보를 SecurityContext 저장
 * */
 @Slf4j
-public class JwtFilter extends GenericFilter{
+public class JwtFilter extends GenericFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 

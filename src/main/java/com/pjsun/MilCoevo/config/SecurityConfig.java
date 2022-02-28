@@ -1,9 +1,11 @@
 package com.pjsun.MilCoevo.config;
 
+import com.pjsun.MilCoevo.domain.user.service.CustomOAuth2UserService;
 import com.pjsun.MilCoevo.jwt.JwtAccessDeniedHandler;
 import com.pjsun.MilCoevo.jwt.JwtAuthenticationEntryPoint;
 import com.pjsun.MilCoevo.jwt.JwtSecurityConfig;
 import com.pjsun.MilCoevo.jwt.JwtTokenProvider;
+import com.pjsun.MilCoevo.oauth.OAuth2SuccessHandler;
 import lombok.ToString;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -25,15 +27,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2SuccessHandler successHandler;
+
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     public SecurityConfig(
+            CustomOAuth2UserService customOAuth2UserService,
+            OAuth2SuccessHandler successHandler,
             JwtTokenProvider jwtTokenProvider,
             JwtAccessDeniedHandler jwtAccessDeniedHandler,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint
     ) {
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.successHandler = successHandler;
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
@@ -51,7 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/h2-console/**", "/favicon.ico", "/error");
         web.ignoring().antMatchers(
                 "/v2/api-docs", "/configuration/ui", "/swagger-resources",
-                "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger/**");
+                "/configuration/security", "/swagger-ui.html", "/webjars/**",
+                "/swagger/**", "/swagger-ui/**");
     }
 
     @Override
@@ -74,6 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/token/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/api/user/register").permitAll()
                 .antMatchers("/api/user/login").permitAll()
@@ -82,6 +93,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
 
                 .and()
+                .oauth2Login().successHandler(successHandler)
+                .userInfoEndpoint().userService(customOAuth2UserService);
+
+        httpSecurity
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
     }
 }
