@@ -9,12 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Getter
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
     private String name;
     private String email;
+    private String password;
     private String picture;
     private ProviderType providerType;
 
@@ -22,11 +24,13 @@ public class OAuthAttributes {
     public OAuthAttributes(Map<String, Object> attributes,
                            String nameAttributeKey, String name,
                            String email, String picture,
+                           String password,
                            ProviderType providerType) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.picture = picture;
         this.providerType = providerType;
     }
@@ -55,6 +59,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) profile.get("nickname"))
                 .email((String) kakao_account.get("email"))
+                .password(String.valueOf(attributes.get("id")))
                 .picture((String) profile.get("profile_image_url"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
@@ -71,6 +76,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
+                .password((String) response.get("id"))
                 .picture((String) response.get("profile_image"))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
@@ -80,9 +86,11 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName,
                                             Map<String, Object> attributes) {
+
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
+                .password((String) attributes.get("sub"))
                 .picture((String) attributes.get("picture"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
@@ -93,7 +101,7 @@ public class OAuthAttributes {
     public User toEntity() {
         return User.createByOAuthBuilder()
                 .email(email)
-                .password(UUID.randomUUID().toString())
+                .password(password)
                 .providerType(providerType)
                 .build();
     }

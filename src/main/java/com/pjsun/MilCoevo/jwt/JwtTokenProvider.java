@@ -18,13 +18,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -81,6 +84,40 @@ public class JwtTokenProvider {
                     .signWith(key, SignatureAlgorithm.HS512) // signature
                     .setExpiration(refresh) // expire
                     .compact());
+    }
+
+    public TokenDto createOAuthToken(Authentication authentication) {
+        log.debug("Authentication to OAuth Token");
+
+        Map<String, Object> attributes =
+                ((OAuth2User) authentication.getPrincipal()).getAttributes();
+
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.tokenValidTime);
+        Date refresh = new Date(now + this.refreshTime);
+
+        String name = (String) attributes.get("email");
+        if(!StringUtils.hasText(name)) {
+            name = (String) ((Map<String, Object>) attributes.get("kakao_account")).get("email");
+        }
+
+        return new TokenDto(
+                Jwts.builder()
+                        .setSubject(name)
+                        .claim(AUTH_KEY, authorities) // payload
+                        .signWith(key, SignatureAlgorithm.HS512) // signature
+                        .setExpiration(validity) // expire
+                        .compact(),
+                Jwts.builder()
+                        .setSubject(name)
+                        .claim(AUTH_KEY, authorities) // payload
+                        .signWith(key, SignatureAlgorithm.HS512) // signature
+                        .setExpiration(refresh) // expire
+                        .compact());
     }
 
     // 토큰 -> Authentication

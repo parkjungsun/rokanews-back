@@ -97,8 +97,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .authorizeRequests()
-                    .antMatchers("/token/**").permitAll()
                     .antMatchers("/swagger-resources/**").permitAll()
+                    .antMatchers("/api/token/**").permitAll()
                     .antMatchers("/api/user/register").permitAll()
                     .antMatchers("/api/user/login").permitAll()
                     .antMatchers("/oauth2/**").permitAll()
@@ -110,19 +110,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
 
                 .oauth2Login()
+                    // OAuth 로그인 진입점
                     .authorizationEndpoint()
                     .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
                     .baseUri("/oauth2/authorization")
                     .and()
 
+                    // 인증서버에서 Redirect point
                     .redirectionEndpoint()
                     .baseUri("/**/oauth2/code/**")
                     .and()
 
+                    // 인증서버에서 받은 유저정보 확인
                     .userInfoEndpoint()
                     .userService(customOAuth2UserService)
                     .and()
 
+                    // 성공시, 실패시
                     .successHandler(successHandler)
                     .failureHandler((AuthenticationFailureHandler) failureHandler);
 

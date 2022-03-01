@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/token")
 public class TokenController {
 
     private final JwtTokenProvider tokenProvider;
@@ -27,12 +29,12 @@ public class TokenController {
     @Value("${success.common.response}")
     private String SUCCESS_RESPONSE;
 
-    @GetMapping("/token/expired")
+    @GetMapping("/expired")
     public String auth() {
         throw new InvalidTokenException();
     }
 
-    @GetMapping("/token/refresh")
+    @GetMapping("/refresh")
     public TokenDto refreshAuth(
             HttpServletRequest request, HttpServletResponse response) {
 

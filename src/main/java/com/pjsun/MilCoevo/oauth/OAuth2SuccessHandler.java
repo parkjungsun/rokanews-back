@@ -8,6 +8,8 @@ import com.pjsun.MilCoevo.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -60,8 +63,11 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
             throw new RuntimeException("Redirect Uri Error!");
         }
 
+        Map<String, Object> attributes = ((OAuth2User) authentication.getPrincipal()).getAttributes();
+        System.out.println("attributes = " + attributes);
+
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-        TokenDto token = tokenProvider.createToken(authentication);
+        TokenDto token = tokenProvider.createOAuthToken(authentication);
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token.getAccessToken())
                 .build().toString();
@@ -74,6 +80,7 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
+        log.debug(clientRedirectUri.toString());
         return appProperties.getOAuth2().getAuthorizedRedirectUris()
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
