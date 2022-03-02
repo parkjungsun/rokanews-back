@@ -3,6 +3,7 @@ package com.pjsun.MilCoevo.oauth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjsun.MilCoevo.config.AppProperties;
 import com.pjsun.MilCoevo.domain.user.dto.TokenDto;
+import com.pjsun.MilCoevo.jwt.JwtFilter;
 import com.pjsun.MilCoevo.jwt.JwtTokenProvider;
 import com.pjsun.MilCoevo.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,14 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         TokenDto token = tokenProvider.createOAuthToken(authentication);
+
+        /* Refresh Token */
+        CookieUtils.addCookie(response, CookieUtils.REFRESH_TOKEN,
+                token.getRefreshToken(), CookieUtils.REFRESH_MAX_AGE);
+
+        /* Access Token */
+        response.addHeader(JwtFilter.AUTHORIZATION_HEADER, token.getAccessToken());
+
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token.getAccessToken())
                 .build().toString();

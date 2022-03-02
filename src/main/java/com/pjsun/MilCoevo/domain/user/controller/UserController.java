@@ -9,6 +9,7 @@ import com.pjsun.MilCoevo.exception.DuplicateUserException;
 import com.pjsun.MilCoevo.jwt.JwtFilter;
 import com.pjsun.MilCoevo.jwt.JwtTokenProvider;
 import com.pjsun.MilCoevo.domain.user.service.UserServiceImpl;
+import com.pjsun.MilCoevo.util.CookieUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,9 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,16 +48,23 @@ public class UserController {
 
     @ApiOperation(value = "로그인", notes = "이메일, 패스워드 기반 로그인")
     @PostMapping("/login")
-    public TokenDto login(
-            @Validated @RequestBody UserLoginRequestDto requestDto
+    public ResponseEntity<ResponseDto> login(
+            @Validated @RequestBody UserLoginRequestDto requestDto,
+            HttpServletResponse response
             ) throws UsernameNotFoundException {
 
         TokenDto jwt = loginByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword());
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        /* Refresh Token */
+        CookieUtils.addCookie(response, CookieUtils.REFRESH_TOKEN,
+                jwt.getRefreshToken(), CookieUtils.REFRESH_MAX_AGE);
 
-        return jwt;
+        /* Access Token */
+        response.addHeader(JwtFilter.AUTHORIZATION_HEADER, jwt.getAccessToken());
+
+        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, jwt.getAccessToken());
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원가입", notes = "이메일, 패스워드 기반 회원가입")
@@ -72,6 +83,20 @@ public class UserController {
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE);
 
         return new ResponseEntity<>(data, HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "로그아웃", notes = "refresh Token 제거")
+    @GetMapping("/logout")
+    public ResponseEntity<ResponseDto> logout(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        /* Refresh Token */
+        CookieUtils.deleteCookie(request, response, CookieUtils.REFRESH_TOKEN);
+
+        ResponseDto data = new ResponseDto(SUCCESS_RESPONSE);
+
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     private TokenDto loginByEmailAndPassword(String email, String password) throws UsernameNotFoundException {

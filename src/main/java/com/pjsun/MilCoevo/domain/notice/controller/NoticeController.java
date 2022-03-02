@@ -4,6 +4,9 @@ import com.pjsun.MilCoevo.domain.notice.dto.*;
 import com.pjsun.MilCoevo.domain.notice.service.NoticeService;
 import com.pjsun.MilCoevo.domain.notice.service.NoticeServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +32,10 @@ public class NoticeController {
     @Value("${success.common.response}")
     private String SUCCESS_RESPONSE;
 
+    @ApiOperation(value = "그룹 공지 추가")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping("/{groupId}")
     public ResponseEntity<ResponseDto> addNotice(
             @PathVariable Long groupId,
@@ -47,6 +54,10 @@ public class NoticeController {
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "그룹 공지 상세 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}/detail/{noticeId}")
     public ResponseEntity<ResponseDto> getNotice(@PathVariable Long noticeId) {
 
@@ -57,6 +68,10 @@ public class NoticeController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 공지 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getNotices(
             @PathVariable Long groupId,
@@ -71,6 +86,10 @@ public class NoticeController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 공지 상세 업데이트")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PatchMapping("/{groupId}/detail/{noticeId}")
     public ResponseEntity<ResponseDto> updateNotice(
             @PathVariable Long groupId,
@@ -90,6 +109,10 @@ public class NoticeController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 공지 상세 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @DeleteMapping("/{groupId}/detail/{noticeId}")
     public ResponseEntity<ResponseDto> removeNotice(
             @PathVariable Long groupId,
@@ -102,6 +125,10 @@ public class NoticeController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 공지 상세 댓글 추가")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping("/{groupId}/detail/{noticeId}/comment")
     public ResponseEntity<ResponseDto> addComment(
             @PathVariable Long groupId,
@@ -121,8 +148,12 @@ public class NoticeController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 공지 상세 댓글 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @DeleteMapping("/{groupId}/detail/{noticeId}/comment/{commentId}")
-    public ResponseEntity<ResponseDto> addComment(
+    public ResponseEntity<ResponseDto> removeComment(
             @PathVariable Long groupId,
             @PathVariable Long commentId) {
 

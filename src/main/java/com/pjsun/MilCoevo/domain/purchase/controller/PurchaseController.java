@@ -4,6 +4,9 @@ import com.pjsun.MilCoevo.domain.purchase.dto.*;
 import com.pjsun.MilCoevo.domain.purchase.service.PurchaseService;
 import com.pjsun.MilCoevo.domain.purchase.service.PurchaseServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +31,10 @@ public class PurchaseController {
     @Value("${success.common.response}")
     private String SUCCESS_RESPONSE;
 
+    @ApiOperation(value = "그룹 구매 추가")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping("/{groupId}")
     public ResponseEntity<ResponseDto> addPurchase(
             @PathVariable Long groupId,
@@ -49,6 +56,10 @@ public class PurchaseController {
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "그룹 구매 상세 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}/detail/{purchaseId}")
     public ResponseEntity<ResponseDto> getPurchase(@PathVariable Long purchaseId) {
 
@@ -59,6 +70,10 @@ public class PurchaseController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 구매 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getPurchases(
             @PathVariable Long groupId,
@@ -73,6 +88,10 @@ public class PurchaseController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 구매 상세 업데이트")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PatchMapping("/{groupId}/detail/{purchaseId}")
     public ResponseEntity<ResponseDto> updatePurchase(
             @PathVariable Long groupId,

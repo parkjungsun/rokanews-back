@@ -7,6 +7,9 @@ import com.pjsun.MilCoevo.domain.absence.dto.SearchAbsenceDto;
 import com.pjsun.MilCoevo.domain.absence.service.AbsenceService;
 import com.pjsun.MilCoevo.domain.absence.service.AbsenceServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +37,10 @@ public class AbsenceController {
     @Value("${success.common.response}")
     private String SUCCESS_RESPONSE;
 
+    @ApiOperation(value = "그룹 부재 추가")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping("/{groupId}")
     public ResponseEntity<ResponseDto> addAbsence(
             @PathVariable Long groupId,
@@ -53,6 +60,10 @@ public class AbsenceController {
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "그룹 부재 상세 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}/detail/{absenceId}")
     public ResponseEntity<ResponseDto> getAbsence(@PathVariable Long absenceId) {
 
@@ -63,6 +74,10 @@ public class AbsenceController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 부재 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getAbsences(
             @PathVariable Long groupId,
@@ -77,6 +92,10 @@ public class AbsenceController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 부재 상세 업데이트")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PatchMapping("/{groupId}/detail/{absenceId}")
     public ResponseEntity<ResponseDto> updateAbsence(
             @PathVariable Long groupId,

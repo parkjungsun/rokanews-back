@@ -3,9 +3,13 @@ package com.pjsun.MilCoevo.domain.user.controller;
 import com.pjsun.MilCoevo.domain.user.dto.TokenDto;
 import com.pjsun.MilCoevo.dto.ResponseDto;
 import com.pjsun.MilCoevo.exception.InvalidTokenException;
+import com.pjsun.MilCoevo.exception.NoRefreshTokenException;
 import com.pjsun.MilCoevo.jwt.JwtFilter;
 import com.pjsun.MilCoevo.jwt.JwtTokenProvider;
-import lombok.Getter;
+import com.pjsun.MilCoevo.util.CookieUtils;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -16,8 +20,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,25 +40,31 @@ public class TokenController {
         throw new InvalidTokenException();
     }
 
+    @ApiOperation(value = "Refresh Token 재발급")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/refresh")
-    public TokenDto refreshAuth(
+    public ResponseEntity<ResponseDto> refreshAuth(
             HttpServletRequest request, HttpServletResponse response) {
 
-        String jwt = resolveToken(request);
+        // refresh token 유효시 access token 발급
+        Cookie cookie = CookieUtils.getCookie(request, CookieUtils.REFRESH_TOKEN)
+                .orElseThrow(() -> {
+                    throw new NoRefreshTokenException("Refresh Token is not existed");
+                });
+        String refreshToken = cookie.getValue();
 
-        if(StringUtils.hasText(jwt) && tokenProvider.validationToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            TokenDto token = tokenProvider.createToken(authentication);
+        // refresh token 만료시 로그인 하라고 보내기
+        if(StringUtils.hasText(refreshToken) && tokenProvider.validationToken(refreshToken)) {
+            Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+            TokenDto newToken = tokenProvider.createToken(authentication);
 
-            response.addHeader("Auth", "Bearer " + token.getAccessToken());
-            response.addHeader("Refresh", "Bearer " + token.getRefreshToken());
-            response.setContentType("application/json;charset=UTF-8");
+            ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, newToken.getAccessToken());
 
-            ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, jwt);
-
-            return token;
+            return new ResponseEntity<>(data, HttpStatus.OK);
         }
-        throw new InvalidTokenException();
+        throw new NoRefreshTokenException("Refresh Token is not existed");
     }
 
     // HttpRequest Header 에서 token 가져오기

@@ -7,6 +7,9 @@ import com.pjsun.MilCoevo.domain.member.dto.MemberGroupDto;
 import com.pjsun.MilCoevo.domain.member.service.MemberService;
 import com.pjsun.MilCoevo.domain.member.service.MemberServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +36,10 @@ public class GroupController {
     @Value("${success.common.response}")
     private String SUCCESS_RESPONSE;
 
+    @ApiOperation(value = "그룹 추가")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping
     public ResponseEntity<ResponseDto> create (
             @Validated @RequestBody GroupCreateRequestDto requestDto,
@@ -53,6 +60,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "그룹 가입")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> register (
             @Validated @RequestBody GroupRegisterRequestDto requestDto,
@@ -73,6 +84,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 초대코드 확인")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/register/{inviteCode}")
     public ResponseEntity<ResponseDto> confirmationGroup (
             @PathVariable String inviteCode) {
@@ -84,6 +99,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 상세")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> groupInfo (
             @PathVariable Long groupId) {
@@ -95,6 +114,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 정보 업데이트")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PatchMapping("/{groupId}/name")
     public ResponseEntity<ResponseDto> updateGroupName (
             @PathVariable Long groupId,
@@ -113,6 +136,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 초대코드 업데이트")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PatchMapping("/{groupId}/code")
     public ResponseEntity<ResponseDto> updateInviteCode (
             @PathVariable Long groupId) {
@@ -124,6 +151,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 멤버 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}/member")
     public ResponseEntity<ResponseDto> getMembers(
             @PathVariable Long groupId,
@@ -138,6 +169,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 멤버 권한 변경")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PatchMapping("/{groupId}/member/{memberId}")
     public ResponseEntity<ResponseDto> updateMemberRank(
             @PathVariable Long memberId,
@@ -157,6 +192,10 @@ public class GroupController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 멤버 차단")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @DeleteMapping("/{groupId}/member/{memberId}")
     public ResponseEntity<ResponseDto> banMember(
             @PathVariable Long groupId,

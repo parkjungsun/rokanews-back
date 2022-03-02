@@ -10,6 +10,9 @@ import java.util.Optional;
 
 public class CookieUtils {
 
+    public static final String REFRESH_TOKEN = "refreshToken";
+    public static final Integer REFRESH_MAX_AGE = 1000 * 60 * 60 * 24 * 7;
+
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
 

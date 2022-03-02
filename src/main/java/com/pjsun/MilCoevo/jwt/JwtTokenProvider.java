@@ -77,12 +77,14 @@ public class JwtTokenProvider {
                     .claim(AUTH_KEY, authorities) // payload
                     .signWith(key, SignatureAlgorithm.HS512) // signature
                     .setExpiration(validity) // expire
+                    .setIssuedAt(new Date(now))
                     .compact(),
                 Jwts.builder()
                     .setSubject(authentication.getName())
                     .claim(AUTH_KEY, authorities) // payload
                     .signWith(key, SignatureAlgorithm.HS512) // signature
                     .setExpiration(refresh) // expire
+                    .setIssuedAt(new Date(now))
                     .compact());
     }
 
@@ -111,12 +113,14 @@ public class JwtTokenProvider {
                         .claim(AUTH_KEY, authorities) // payload
                         .signWith(key, SignatureAlgorithm.HS512) // signature
                         .setExpiration(validity) // expire
+                        .setIssuedAt(new Date(now))
                         .compact(),
                 Jwts.builder()
                         .setSubject(name)
                         .claim(AUTH_KEY, authorities) // payload
                         .signWith(key, SignatureAlgorithm.HS512) // signature
                         .setExpiration(refresh) // expire
+                        .setIssuedAt(new Date(now))
                         .compact());
     }
 

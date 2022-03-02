@@ -4,6 +4,7 @@ import com.pjsun.MilCoevo.domain.user.ProviderType;
 import com.pjsun.MilCoevo.domain.user.User;
 import com.pjsun.MilCoevo.domain.user.dto.OAuthAttributes;
 import com.pjsun.MilCoevo.domain.user.repository.UserRepository;
+import com.pjsun.MilCoevo.exception.DuplicateUserException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,6 +56,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
                 .orElse(attributes.toEntity());
+
+        if (!user.getProviderType().equals(attributes.getProviderType())) {
+            throw new DuplicateUserException("Email is already registered By Other Provider");
+        }
 
         return userRepository.save(user);
     }

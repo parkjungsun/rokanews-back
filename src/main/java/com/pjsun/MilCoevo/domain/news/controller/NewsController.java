@@ -6,6 +6,9 @@ import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
 import com.pjsun.MilCoevo.domain.news.service.NewsService;
 import com.pjsun.MilCoevo.domain.news.service.NewsServiceImpl;
 import com.pjsun.MilCoevo.dto.ResponseDto;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +36,10 @@ public class NewsController {
     @Value("${success.common.response}")
     private String SUCCESS_RESPONSE;
 
+    @ApiOperation(value = "그룹 뉴스 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getGroupNews(
             @PathVariable Long groupId,
@@ -46,6 +53,10 @@ public class NewsController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 키워드 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}/keyword")
     public ResponseEntity<ResponseDto> getGroupKeywords (
             @PathVariable Long groupId) {
@@ -57,6 +68,10 @@ public class NewsController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "그룹 키워드 추가")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PostMapping("/{groupId}/keyword")
     public ResponseEntity<ResponseDto> addKeyword (
             @PathVariable Long groupId,
@@ -75,6 +90,10 @@ public class NewsController {
         return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "그룹 키워드 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @DeleteMapping("/{groupId}/keyword/{keywordId}")
     public ResponseEntity<ResponseDto> removeKeyword (
             @PathVariable Long keywordId) {

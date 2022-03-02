@@ -43,6 +43,9 @@ public class CommonControllerAdvice {
     @Value("${error.common.oAuthProviderMissMatchException}")
     private String OAUTH_PROVIDER_MISS_MATCH_EXCEPTION;
 
+    @Value("${error.common.noRefreshTokenException}")
+    private String NO_REFRESH_TOKEN_EXCEPTION;
+
     @ExceptionHandler(NonUniqueResultException.class)
     public ResponseEntity<ResponseDto> nonUniqueEx(NonUniqueResultException e) {
 
@@ -122,5 +125,14 @@ public class CommonControllerAdvice {
         ResponseDto error = new ResponseDto(OAUTH_PROVIDER_MISS_MATCH_EXCEPTION, e.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoRefreshTokenException.class)
+    public ResponseEntity<ResponseDto> noRefreshTokenEx(NoRefreshTokenException e) {
+
+        log.debug("Exception: noRefreshTokenEx");
+        ResponseDto error = new ResponseDto(NO_REFRESH_TOKEN_EXCEPTION, e.getMessage());
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 }

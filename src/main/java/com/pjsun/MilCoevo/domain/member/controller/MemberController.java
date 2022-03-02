@@ -37,10 +37,10 @@ public class MemberController {
     @Value("${success.common.response}")
     private String SUCCESS_RESPONSE;
 
-    @ApiOperation(value = "사용자 가입 그룹 조회")
+    @ApiOperation(value = "사용자 멤버 전체 조회")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "accessToken",
-                    required = true, dataType = "String", paramType = "header") })
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping
     public ResponseEntity<ResponseDto> getMembers(
             Pageable pageable) throws InvalidTokenException {
@@ -52,6 +52,10 @@ public class MemberController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "사용자 멤버 상세 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getMember(@PathVariable Long groupId) {
 
@@ -63,8 +67,12 @@ public class MemberController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "사용자 멤버 상세 업데이트")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @PatchMapping("/{groupId}")
-    public ResponseEntity<ResponseDto> getMember(
+    public ResponseEntity<ResponseDto> updateMember(
             @PathVariable Long groupId,
             @Validated @RequestBody UpdateMemberRequestDto requestDto,
             BindingResult bindingResult) {
@@ -82,6 +90,10 @@ public class MemberController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "사용자 멤버 상세 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
+    })
     @DeleteMapping("/{groupId}")
     public ResponseEntity<ResponseDto> removeMember(@PathVariable Long groupId) {
 

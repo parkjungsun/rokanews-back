@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Long register(String email, String password) throws DuplicateUserException {
         if (userRepository.findByEmail(email).orElse(null) != null) {
-            throw new DuplicateUserException("Email Already Registered");
+            throw new DuplicateUserException("Email is already registered");
         }
 
         User user = User.createByUserBuilder()
