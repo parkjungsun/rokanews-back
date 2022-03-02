@@ -1,0 +1,41 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  messages:
+    basename: messages, errors
+  profiles:
+    active: local
+    include: oauth, code
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        #use_sql_comments: true
+    open-in-view: true
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 100
+logging.level:
+  com.pjsun.MilCoevo: trace
+  org.hibernate.SQL: debug
+
+server:
+  error:
+    include-binding-errors: never
+    include-exception: false
+    include-message: always
+    include-stacktrace: never
+    whitelabel:
+      enabled: true
+    path: /error
