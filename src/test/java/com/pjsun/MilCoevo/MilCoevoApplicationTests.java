@@ -9,6 +9,7 @@ class MilCoevoApplicationTests extends IntegrationTest {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
