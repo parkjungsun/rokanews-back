@@ -31,7 +31,6 @@ public class NoticeResponseDto {
 
     private LocalDateTime createdDate;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<CommentDto> comments;
 
     @QueryProjection
@@ -52,7 +51,7 @@ public class NoticeResponseDto {
         this.writerPosition = notice.getWriter().getPosition();
         this.writerNickname = notice.getWriter().getNickname();
         this.createdDate = notice.getCreatedDate();
-        this.comments = notice.getComments().stream()
+        this.comments = notice.getComments().stream().filter(i -> i.isAvailable() == true)
                 .map(CommentDto::new).collect(Collectors.toList());
     }
 }

@@ -72,10 +72,10 @@ public class NoticeController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/{groupId}")
+    @PostMapping("/{groupId}/list")
     public ResponseEntity<ResponseDto> getNotices(
             @PathVariable Long groupId,
-            @ModelAttribute SearchNoticeDto searchCondition,
+            @RequestBody SearchNoticeDto searchCondition,
             Pageable pageable) {
 
         Page<NoticeResponseDto> notices = noticeService
@@ -145,7 +145,7 @@ public class NoticeController {
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, commentId);
 
-        return new ResponseEntity<>(data, HttpStatus.OK);
+        return new ResponseEntity<>(data, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "그룹 공지 상세 댓글 삭제")
