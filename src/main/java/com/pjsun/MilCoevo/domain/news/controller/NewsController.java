@@ -1,5 +1,7 @@
 package com.pjsun.MilCoevo.domain.news.controller;
 
+import com.pjsun.MilCoevo.domain.news.Keyword;
+import com.pjsun.MilCoevo.domain.news.dto.KeywordsDto;
 import com.pjsun.MilCoevo.domain.news.dto.NewKeywordRequestDto;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
@@ -20,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Key;
 import java.util.List;
 
 @Slf4j
@@ -40,10 +43,10 @@ public class NewsController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/{groupId}")
+    @PostMapping("/{groupId}")
     public ResponseEntity<ResponseDto> getGroupNews(
             @PathVariable Long groupId,
-            @ModelAttribute SearchNewsDto searchCondition,
+            @RequestBody SearchNewsDto searchCondition,
             Pageable pageable) {
 
         Page<NewsDto> news = newsService.getGroupNews(groupId, searchCondition, pageable);
@@ -61,7 +64,7 @@ public class NewsController {
     public ResponseEntity<ResponseDto> getGroupKeywords (
             @PathVariable Long groupId) {
 
-        List<String> groupKeywords = newsService.getGroupKeywords(groupId);
+        List<KeywordsDto> groupKeywords = newsService.getGroupKeywords(groupId);
 
         ResponseDto data = new ResponseDto(SUCCESS_RESPONSE, groupKeywords);
 

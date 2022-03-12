@@ -39,7 +39,8 @@ public class AbsenceRepositoryImpl implements AbsenceRepositoryCustom {
                         absence.endDate,
                         absence.reason,
                         absence.drafter.position.as("drafterPosition"),
-                        absence.drafter.position.as("drafterNickname")
+                        absence.drafter.nickname.as("drafterNickname"),
+                        absence.processStatus
                 ))
                 .from(absence)
                 .where(

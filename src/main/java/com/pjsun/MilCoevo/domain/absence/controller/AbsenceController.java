@@ -78,10 +78,10 @@ public class AbsenceController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/{groupId}")
+    @PostMapping("/{groupId}/list")
     public ResponseEntity<ResponseDto> getAbsences(
             @PathVariable Long groupId,
-            @ModelAttribute SearchAbsenceDto searchCondition,
+            @RequestBody SearchAbsenceDto searchCondition,
             Pageable pageable) {
 
         Page<AbsenceResponseDto> absences = absenceService

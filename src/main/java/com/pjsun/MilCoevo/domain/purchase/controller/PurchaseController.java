@@ -74,10 +74,10 @@ public class PurchaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/{groupId}")
+    @PostMapping("/{groupId}/list")
     public ResponseEntity<ResponseDto> getPurchases(
             @PathVariable Long groupId,
-            @ModelAttribute SearchPurchaseDto searchCondition,
+            @RequestBody SearchPurchaseDto searchCondition,
             Pageable pageable) {
 
         PurchasesResponseDto purchases = purchaseService

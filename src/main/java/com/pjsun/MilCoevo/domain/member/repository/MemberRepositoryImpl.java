@@ -25,6 +25,7 @@ import static com.pjsun.MilCoevo.domain.absence.QAbsence.absence;
 import static com.pjsun.MilCoevo.domain.group.QGroup.group;
 import static com.pjsun.MilCoevo.domain.member.QMember.member;
 import static com.pjsun.MilCoevo.domain.user.QUser.user;
+import static com.querydsl.core.types.ExpressionUtils.count;
 
 public class MemberRepositoryImpl implements MemberRepositoryCustom{
 

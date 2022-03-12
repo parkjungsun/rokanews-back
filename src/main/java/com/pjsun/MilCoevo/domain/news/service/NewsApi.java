@@ -51,11 +51,27 @@ public class NewsApi {
         }
     }
 
+    @Scheduled(cron = "0 0 0 * * *")
+    private void newsDelBot() {
+        newsRepository.deleteAll();
+    }
+
     private String getIndex() {
         int h = LocalDateTime.now().getHour();
         int m = LocalDateTime.now().getMinute();
-        String fh = String.format("%02d", h);
-        String fm = String.format("%02d", m);
+        String fh = "";
+        if(m >= 45) {
+            fh = String.format("%02d", h + 1);
+        } else {
+            fh = String.format("%02d", h);
+        }
+        String fm = "";
+        if(m >= 15 && m < 45) {
+            fm = "30";
+        } else {
+            fm = "00";
+        }
+
         return fh.concat(fm);
     }
 

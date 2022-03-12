@@ -1,6 +1,7 @@
 package com.pjsun.MilCoevo.domain.absence.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.pjsun.MilCoevo.domain.ProcessStatus;
 import com.pjsun.MilCoevo.domain.absence.Absence;
 import com.pjsun.MilCoevo.domain.absence.Reason;
 import com.querydsl.core.annotations.QueryProjection;
@@ -28,18 +29,14 @@ public class AbsenceResponseDto {
     private LocalDate endDate;
     private Reason reason;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ProcessStatus processStatus;
+
     private String drafterEmail;
     private String drafterPosition;
     private String drafterNickname;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterEmail;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterPosition;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterNickname;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -51,7 +48,8 @@ public class AbsenceResponseDto {
     @QueryProjection
     public AbsenceResponseDto(
             Long id, String title, LocalDate startDate, LocalDate endDate,
-            Reason reason, String drafterPosition, String drafterNickname) {
+            Reason reason, String drafterPosition, String drafterNickname,
+            ProcessStatus processStatus) {
         this.id = id;
         this.title = title;
         this.startDate = startDate;
@@ -59,6 +57,7 @@ public class AbsenceResponseDto {
         this.reason = reason;
         this.drafterPosition = drafterPosition;
         this.drafterNickname = drafterNickname;
+        this.processStatus = processStatus;
     }
 
     public AbsenceResponseDto(Absence absence) {
@@ -68,7 +67,7 @@ public class AbsenceResponseDto {
         this.startDate = absence.getStartDate();
         this.endDate = absence.getEndDate();
         this.reason = absence.getReason();
-
+        this.processStatus = absence.getProcessStatus();
         this.drafterEmail = absence.getDrafter().getEmail();
         this.drafterPosition = absence.getDrafter().getPosition();
         this.drafterNickname = absence.getDrafter().getNickname();

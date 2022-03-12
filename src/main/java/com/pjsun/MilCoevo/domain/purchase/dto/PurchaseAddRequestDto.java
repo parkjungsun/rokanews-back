@@ -1,5 +1,6 @@
 package com.pjsun.MilCoevo.domain.purchase.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pjsun.MilCoevo.domain.purchase.Purpose;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class PurchaseAddRequestDto {
     private Purpose purpose;
 
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate purchaseDate;
 
     private List<ItemDto> items;

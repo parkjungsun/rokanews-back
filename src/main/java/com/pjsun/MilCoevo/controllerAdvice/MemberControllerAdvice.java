@@ -24,10 +24,10 @@ public class MemberControllerAdvice {
     @ExceptionHandler(MaxMemberException.class)
     public ResponseEntity<ResponseDto> maxMemberEx(MaxMemberException e) {
 
-        log.debug("Exception: noMemberEx");
+        log.debug("Exception: maxMemberEx");
         ResponseDto message = new ResponseDto(MAX_MEMBER_EXCEPTION, "Exceeding The Maximum number of members");
 
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return new ResponseEntity<>(message, HttpStatus.NO_CONTENT);
     }
 
     @ExceptionHandler(NoMemberException.class)

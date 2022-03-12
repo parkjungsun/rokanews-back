@@ -46,6 +46,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:8080", "http://localhost:3000")    // 자원 공유 origin
                 .allowedMethods("GET", "POST", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
+                .exposedHeaders("Set-Cookie")
                 .allowCredentials(true)
                 .maxAge(3600);
     }

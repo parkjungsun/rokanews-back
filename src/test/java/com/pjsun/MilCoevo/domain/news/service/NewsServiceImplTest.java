@@ -3,6 +3,7 @@ package com.pjsun.MilCoevo.domain.news.service;
 import com.pjsun.MilCoevo.domain.group.Group;
 import com.pjsun.MilCoevo.domain.group.repository.GroupRepository;
 import com.pjsun.MilCoevo.domain.news.Keyword;
+import com.pjsun.MilCoevo.domain.news.dto.KeywordsDto;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
 import com.pjsun.MilCoevo.domain.news.repository.KeywordRepository;
@@ -79,10 +80,10 @@ class NewsServiceImplTest extends MockTest {
     @DisplayName("그룹 키워드 조회")
     void getGroupKeywordsTest() {
         //given
-        List<String> keywords = new ArrayList<>(10);
+        List<KeywordsDto> keywords = new ArrayList<>(10);
 
         given(newsRepository.searchGroupAllKeyword(any())).willReturn(keywords);
         //when
-        List<String> result = newsService.getGroupKeywords(1L);
+        List<KeywordsDto> result = newsService.getGroupKeywords(1L);
     }
 }

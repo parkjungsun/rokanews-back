@@ -4,6 +4,7 @@ import com.pjsun.MilCoevo.domain.group.Group;
 import com.pjsun.MilCoevo.domain.group.repository.GroupRepository;
 import com.pjsun.MilCoevo.domain.news.Keyword;
 import com.pjsun.MilCoevo.domain.news.News;
+import com.pjsun.MilCoevo.domain.news.dto.KeywordsDto;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
 import com.pjsun.MilCoevo.test.RepositoryTest;
@@ -91,7 +92,7 @@ class NewsRepositoryTest extends RepositoryTest {
     @DisplayName("그룹 뉴스 키워드")
     void searchGroupAllKeyword() {
         //when
-        List<String> keywords = newsRepository.searchGroupAllKeyword(group2.getId());
+        List<KeywordsDto> keywords = newsRepository.searchGroupAllKeyword(group2.getId());
 
         //then
         assertThat(keywords.size()).isEqualTo(2);

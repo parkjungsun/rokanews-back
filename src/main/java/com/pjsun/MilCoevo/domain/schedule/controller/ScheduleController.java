@@ -78,10 +78,10 @@ public class ScheduleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/{groupId}")
+    @PostMapping("/{groupId}/list")
     public ResponseEntity<ResponseDto> getSchedules(
             @PathVariable Long groupId,
-            @ModelAttribute SearchScheduleDto searchCondition,
+            @RequestBody SearchScheduleDto searchCondition,
             Pageable pageable) {
 
         Page<ScheduleResponseDto> schedules = scheduleService

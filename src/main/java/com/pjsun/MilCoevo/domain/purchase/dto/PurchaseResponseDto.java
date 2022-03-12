@@ -2,6 +2,7 @@ package com.pjsun.MilCoevo.domain.purchase.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.pjsun.MilCoevo.domain.ProcessStatus;
 import com.pjsun.MilCoevo.domain.purchase.Purchase;
 import com.pjsun.MilCoevo.domain.purchase.Purpose;
 import com.querydsl.core.annotations.QueryProjection;
@@ -30,18 +31,13 @@ public class PurchaseResponseDto {
     private Long purchasePrice;
     private LocalDate purchaseDate;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ProcessStatus processStatus;
+
     private String drafterEmail;
     private String drafterPosition;
     private String drafterNickname;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterEmail;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterPosition;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterNickname;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -56,7 +52,8 @@ public class PurchaseResponseDto {
     @QueryProjection
     public PurchaseResponseDto(
             Long id, String title, Purpose purpose, Long purchasePrice,
-            String drafterPosition, String drafterNickname, LocalDate purchaseDate) {
+            String drafterPosition, String drafterNickname, LocalDate purchaseDate,
+            ProcessStatus processStatus) {
         this.id = id;
         this.title = title;
         this.purpose = purpose;
@@ -64,6 +61,7 @@ public class PurchaseResponseDto {
         this.drafterPosition = drafterPosition;
         this.drafterNickname = drafterNickname;
         this.purchaseDate = purchaseDate;
+        this.processStatus = processStatus;
     }
 
     public PurchaseResponseDto(Purchase purchase) {
@@ -72,7 +70,7 @@ public class PurchaseResponseDto {
         this.content = purchase.getContent();
         this.purpose = purchase.getPurpose();
         this.purchasePrice = purchase.getPurchasePrice();
-
+        this.processStatus = purchase.getProcessStatus();
         this.drafterEmail = purchase.getDrafter().getEmail();
         this.drafterPosition = purchase.getDrafter().getPosition();
         this.drafterNickname = purchase.getDrafter().getNickname();

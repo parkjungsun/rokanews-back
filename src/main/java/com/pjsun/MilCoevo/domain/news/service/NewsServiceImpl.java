@@ -3,6 +3,7 @@ package com.pjsun.MilCoevo.domain.news.service;
 import com.pjsun.MilCoevo.domain.group.Group;
 import com.pjsun.MilCoevo.domain.group.repository.GroupRepository;
 import com.pjsun.MilCoevo.domain.news.Keyword;
+import com.pjsun.MilCoevo.domain.news.dto.KeywordsDto;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
 import com.pjsun.MilCoevo.domain.news.repository.KeywordRepository;
@@ -50,7 +51,7 @@ public class NewsServiceImpl implements NewsService{
         keywordRepository.deleteById(keywordId);
     }
 
-    public List<String> getGroupKeywords(Long groupId) {
+    public List<KeywordsDto> getGroupKeywords(Long groupId) {
        return newsRepository.searchGroupAllKeyword(groupId);
     }
 }

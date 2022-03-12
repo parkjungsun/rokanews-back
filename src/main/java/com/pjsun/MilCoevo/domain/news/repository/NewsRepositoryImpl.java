@@ -5,9 +5,7 @@ import com.pjsun.MilCoevo.domain.group.QGroup;
 import com.pjsun.MilCoevo.domain.news.Keyword;
 import com.pjsun.MilCoevo.domain.news.QKeyword;
 import com.pjsun.MilCoevo.domain.news.QNews;
-import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
-import com.pjsun.MilCoevo.domain.news.dto.QNewsDto;
-import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
+import com.pjsun.MilCoevo.domain.news.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -39,13 +37,13 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
         List<NewsDto> result = queryFactory
                 .select(
                         new QNewsDto(
-                                news.id,
-                                news.keyword,
-                                news.title,
-                                news.imageLink,
+                                news.id.max(),
+                                news.keyword.max(),
+                                news.title.max(),
+                                news.imageLink.max(),
                                 news.link,
-                                news.pubDate,
-                                news.index
+                                news.pubDate.max(),
+                                news.index.max()
                         )
                 ).from(news)
                 .where(news.keyword.in(
@@ -55,7 +53,8 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
                                 .where(keyword.group.id.eq(groupId))),
                         timeIndex(searchCondition.getTimeIndex())
                 )
-                .orderBy(news.pubDate.desc())
+                .groupBy(news.link)
+                .orderBy(news.published.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -77,9 +76,14 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
     }
 
     @Override
-    public List<String> searchGroupAllKeyword(Long groupId) {
+    public List<KeywordsDto> searchGroupAllKeyword(Long groupId) {
         return queryFactory
-                .select(keyword.content)
+                .select(
+                        new QKeywordsDto(
+                                keyword.id,
+                                keyword.content
+                        )
+                )
                 .from(keyword)
                 .where(keyword.group.id.eq(groupId))
                 .fetch();

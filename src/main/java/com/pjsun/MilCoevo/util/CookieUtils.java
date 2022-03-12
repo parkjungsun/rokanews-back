@@ -1,5 +1,6 @@
 package com.pjsun.MilCoevo.util;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.util.SerializationUtils;
 
 import javax.servlet.http.Cookie;
@@ -33,6 +34,16 @@ public class CookieUtils {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
+    }
+
+    public static void addCookieCustom(HttpServletResponse response, String name, String value, int maxAge) {
+        ResponseCookie cook = ResponseCookie.from(name, value)
+                .path("/")
+                .sameSite("None")
+                .httpOnly(true)
+                .maxAge(maxAge)
+                .build();
+        response.setHeader("Set-Cookie", cook.toString());
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {

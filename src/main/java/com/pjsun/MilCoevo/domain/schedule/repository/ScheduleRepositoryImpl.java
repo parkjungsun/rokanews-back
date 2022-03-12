@@ -40,7 +40,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
                         schedule.workScope,
                         schedule.workDate,
                         schedule.drafter.position.as("drafterPosition"),
-                        schedule.drafter.nickname.as("drafterNickname")
+                        schedule.drafter.nickname.as("drafterNickname"),
+                        schedule.processStatus
                 ))
                 .from(schedule)
                 .where(

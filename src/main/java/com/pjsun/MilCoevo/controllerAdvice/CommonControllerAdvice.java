@@ -88,7 +88,7 @@ public class CommonControllerAdvice {
         log.debug("Exception: invalidTokenEx");
         ResponseDto error = new ResponseDto(INVALID_TOKEN_EXCEPTION, e.getMessage());
 
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(IllegalPathException.class)

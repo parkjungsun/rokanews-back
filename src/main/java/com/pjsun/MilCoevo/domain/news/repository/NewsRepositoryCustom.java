@@ -1,6 +1,7 @@
 package com.pjsun.MilCoevo.domain.news.repository;
 
 import com.pjsun.MilCoevo.domain.news.Keyword;
+import com.pjsun.MilCoevo.domain.news.dto.KeywordsDto;
 import com.pjsun.MilCoevo.domain.news.dto.NewsDto;
 import com.pjsun.MilCoevo.domain.news.dto.SearchNewsDto;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,6 @@ import java.util.Optional;
 public interface NewsRepositoryCustom {
 
     Page<NewsDto> searchGroupNews(Long groupId, SearchNewsDto searchCondition, Pageable pageable);
-    List<String> searchGroupAllKeyword(Long groupId);
+    List<KeywordsDto> searchGroupAllKeyword(Long groupId);
     Optional<Keyword> searchGroupKeyword(Long groupId, String keyword);
 }

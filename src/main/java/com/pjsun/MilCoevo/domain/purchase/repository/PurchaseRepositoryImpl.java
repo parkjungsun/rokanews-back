@@ -40,8 +40,9 @@ public class PurchaseRepositoryImpl implements PurchaseRepositoryCustom {
                         purchase.purpose,
                         purchase.purchasePrice,
                         purchase.drafter.position.as("drafterPosition"),
-                        purchase.drafter.position.as("drafterNickname"),
-                        purchase.purchaseDate
+                        purchase.drafter.nickname.as("drafterNickname"),
+                        purchase.purchaseDate,
+                        purchase.processStatus
                 ))
                 .from(purchase)
                 .where(
@@ -50,7 +51,7 @@ public class PurchaseRepositoryImpl implements PurchaseRepositoryCustom {
                         rearDate(searchCondition.getRearDate()),
                         processStatus(searchCondition.getProcessStatus())
                 )
-                .orderBy(purchase.purchaseDate.asc())
+                .orderBy(purchase.purchaseDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -18,6 +18,7 @@ public class MemberGroupDto {
     private String position;
     private String nickname;
     private LocalDateTime lastVisitedDate;
+    private Long joinMember;
 
     @QueryProjection
     public MemberGroupDto(

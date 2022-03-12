@@ -7,6 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NewsDto {
@@ -22,7 +26,7 @@ public class NewsDto {
     public News getNews(String keyword, String index) {
         return News.createNewsBuilder()
                 .title(title).link(link).keyword(keyword)
-                .pubDate(pubDate).index(index).build();
+                .pubDate(pubDate).published(dToLdt(pubDate)).index(index).build();
     }
 
     @QueryProjection
@@ -35,5 +39,10 @@ public class NewsDto {
         this.link = link;
         this.pubDate = pubDate;
         this.index = index;
+    }
+
+    private LocalDateTime dToLdt(String date) {
+        Date now = new Date(date);
+        return LocalDateTime.ofInstant(now.toInstant(), ZoneId.systemDefault());
     }
 }

@@ -1,5 +1,6 @@
 package com.pjsun.MilCoevo.domain.absence.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pjsun.MilCoevo.domain.absence.Reason;
 import com.pjsun.MilCoevo.domain.schedule.WorkScope;
 import lombok.AccessLevel;
@@ -28,8 +29,10 @@ public class AbsenceAddRequestDto {
     private Reason reason;
 
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 }

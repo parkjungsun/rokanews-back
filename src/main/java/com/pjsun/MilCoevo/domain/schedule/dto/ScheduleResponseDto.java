@@ -1,6 +1,7 @@
 package com.pjsun.MilCoevo.domain.schedule.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.pjsun.MilCoevo.domain.ProcessStatus;
 import com.pjsun.MilCoevo.domain.schedule.Schedule;
 import com.pjsun.MilCoevo.domain.schedule.WorkScope;
 import com.querydsl.core.annotations.QueryProjection;
@@ -24,18 +25,14 @@ public class ScheduleResponseDto {
     private WorkScope workScope;
     private LocalDateTime workDate;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ProcessStatus processStatus;
+
     private String drafterEmail;
     private String drafterPosition;
     private String drafterNickname;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterEmail;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterPosition;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String arbiterNickname;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -48,13 +45,14 @@ public class ScheduleResponseDto {
     public ScheduleResponseDto(
             Long id, String title, WorkScope workScope,
             LocalDateTime workDate, String drafterPosition,
-            String drafterNickname) {
+            String drafterNickname, ProcessStatus processStatus) {
         this.id = id;
         this.title = title;
         this.workScope = workScope;
         this.workDate = workDate;
         this.drafterPosition = drafterPosition;
         this.drafterNickname = drafterNickname;
+        this.processStatus = processStatus;
     }
 
     public ScheduleResponseDto(Schedule schedule) {
@@ -63,7 +61,7 @@ public class ScheduleResponseDto {
         this.content = schedule.getContent();
         this.workScope = schedule.getWorkScope();
         this.workDate = schedule.getWorkDate();
-
+        this.processStatus = schedule.getProcessStatus();
         this.drafterEmail = schedule.getDrafter().getEmail();
         this.drafterPosition = schedule.getDrafter().getPosition();
         this.drafterNickname = schedule.getDrafter().getNickname();

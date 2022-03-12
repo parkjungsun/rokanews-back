@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -56,7 +57,7 @@ public class UserController {
         TokenDto jwt = loginByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword());
 
         /* Refresh Token */
-        CookieUtils.addCookie(response, CookieUtils.REFRESH_TOKEN,
+        CookieUtils.addCookieCustom(response, CookieUtils.REFRESH_TOKEN,
                 jwt.getRefreshToken(), CookieUtils.REFRESH_MAX_AGE);
 
         /* Access Token */
