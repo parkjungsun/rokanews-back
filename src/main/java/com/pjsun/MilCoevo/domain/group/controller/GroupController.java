@@ -155,10 +155,10 @@ public class GroupController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, dataType = "String", paramType = "header")
     })
-    @GetMapping("/{groupId}/member")
+    @PostMapping("/{groupId}/member")
     public ResponseEntity<ResponseDto> getMembers(
             @PathVariable Long groupId,
-            @ModelAttribute SearchGroupMemberDto searchCondition,
+            @RequestBody SearchGroupMemberDto searchCondition,
             Pageable pageable) {
 
         Page<MemberGroupDto> members = groupService.getMembers(groupId, searchCondition, pageable);

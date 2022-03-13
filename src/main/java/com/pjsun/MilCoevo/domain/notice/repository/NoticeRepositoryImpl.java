@@ -41,7 +41,8 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                 .from(notice)
                 .where(
                         notice.group.id.eq(groupId),
-                        searchTitle(searchCondition.getSearchTitle())
+                        searchTitle(searchCondition.getSearchTitle()),
+                        notice.isAvailable.eq(true)
                 )
                 .orderBy(notice.createdDate.desc())
                 .offset(pageable.getOffset())

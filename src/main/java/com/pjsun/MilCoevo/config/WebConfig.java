@@ -36,7 +36,8 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(checkLeaderInterceptor())
                 .addPathPatterns("/api/group/**/member/**",
-                        "/api/group/**/name","/api/group/**/code");
+                        "/api/group/**/name","/api/group/**/code")
+                .excludePathPatterns("/api/group/**/member");
     }
 
     @Override

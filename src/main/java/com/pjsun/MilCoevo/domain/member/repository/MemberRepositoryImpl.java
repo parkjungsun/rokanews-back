@@ -50,6 +50,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     public Page<MemberGroupDto> searchMembersByUserId(Long userId, Pageable pageable) {
         List<MemberGroupDto> result = queryFactory
                 .select(new QMemberGroupDto(
+                        member.id,
                         member.group.id.as("groupId"),
                         member.group.groupName,
                         member.rank,
@@ -84,6 +85,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     public Page<MemberGroupDto> searchMembersByGroupId(Long groupId, SearchGroupMemberDto searchCondition, Pageable pageable) {
         List<MemberGroupDto> result = queryFactory
                 .select(new QMemberGroupDto(
+                        member.id,
                         member.group.id.as("groupId"),
                         member.group.groupName,
                         member.rank,
@@ -94,7 +96,8 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
                 )).from(member)
                 .where(
                         member.group.id.eq(groupId),
-                        searchName(searchCondition.getSearchName())
+                        searchName(searchCondition.getSearchName()),
+                        member.isAvailable.eq(true)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

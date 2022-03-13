@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class MemberGroupDto {
-    
+
+    private Long id;
     private Long groupId;
     private String groupName;
     private Rank rank;
@@ -21,9 +22,11 @@ public class MemberGroupDto {
 
     @QueryProjection
     public MemberGroupDto(
+            Long id,
             Long groupId, String groupName, Rank rank, String email,
             String position, String nickname, LocalDateTime lastVisitedDate) {
 
+        this.id = id;
         this.groupId =groupId;
         this.groupName = groupName;
         this.rank = rank;
