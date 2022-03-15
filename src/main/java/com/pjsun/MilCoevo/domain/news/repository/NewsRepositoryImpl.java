@@ -43,7 +43,7 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
                                 news.imageLink.max(),
                                 news.link,
                                 news.pubDate.max(),
-                                news.index.max()
+                                news.timeIndex.max()
                         )
                 ).from(news)
                 .where(news.keyword.in(
@@ -103,6 +103,6 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
     }
 
     private BooleanExpression timeIndex(String timeIndex) {
-        return StringUtils.hasText(timeIndex) ? news.index.eq(timeIndex) : null;
+        return StringUtils.hasText(timeIndex) ? news.timeIndex.eq(timeIndex) : null;
     }
 }

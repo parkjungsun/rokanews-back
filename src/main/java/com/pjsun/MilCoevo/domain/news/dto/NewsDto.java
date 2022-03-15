@@ -21,24 +21,24 @@ public class NewsDto {
     private String imageLink;
     private String link;
     private String pubDate;
-    private String index;
+    private String timeIndex;
 
-    public News getNews(String keyword, String index) {
+    public News getNews(String keyword, String timeIndex) {
         return News.createNewsBuilder()
                 .title(title).link(link).keyword(keyword)
-                .pubDate(pubDate).published(dToLdt(pubDate)).index(index).build();
+                .pubDate(pubDate).published(dToLdt(pubDate)).timeIndex(timeIndex).build();
     }
 
     @QueryProjection
     public NewsDto(Long id, String keyword, String title, String imageLink,
-                   String link, String pubDate, String index) {
+                   String link, String pubDate, String timeIndex) {
         this.id = id;
         this.keyword = keyword;
         this.title = title;
         this.imageLink = imageLink;
         this.link = link;
         this.pubDate = pubDate;
-        this.index = index;
+        this.timeIndex = timeIndex;
     }
 
     private LocalDateTime dToLdt(String date) {

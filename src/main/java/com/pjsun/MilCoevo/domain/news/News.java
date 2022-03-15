@@ -30,14 +30,14 @@ public class News extends BaseEntity {
 
     private String pubDate;
 
-    private String index;
+    private String timeIndex;
 
     private LocalDateTime published;
 
     /* 생성자 */
     @Builder(builderClassName = "createNewsBuilder", builderMethodName = "createNewsBuilder")
     public News(String keyword, String title, String imageLink,
-                String link, String pubDate, String index, LocalDateTime published) {
+                String link, String pubDate, String timeIndex, LocalDateTime published) {
         Assert.hasText(keyword, () -> "[News] keyword must not be empty");
         Assert.hasText(title, () -> "[News] title must not be empty");
         Assert.hasText(link, () -> "[News] link must not be empty");
@@ -48,7 +48,7 @@ public class News extends BaseEntity {
         this.imageLink = imageLink;
         this.link = link;
         this.pubDate = pubDate;
-        this.index = index;
+        this.timeIndex = timeIndex;
         this.published = published;
     }
 
