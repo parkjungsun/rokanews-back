@@ -7,9 +7,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 class MilCoevoApplicationTests extends IntegrationTest {
 
-	@Test
-	void contextLoads() {
-
-	}
-
 }
