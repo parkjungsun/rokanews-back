@@ -43,7 +43,8 @@ public class NewsRepositoryImpl implements NewsRepositoryCustom {
                                 news.imageLink.max(),
                                 news.link,
                                 news.pubDate.max(),
-                                news.timeIndex.max()
+                                news.timeIndex.max(),
+                                news.published.max()
                         )
                 ).from(news)
                 .where(news.keyword.in(

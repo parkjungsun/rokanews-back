@@ -22,6 +22,7 @@ public class NewsDto {
     private String link;
     private String pubDate;
     private String timeIndex;
+    private LocalDateTime published;
 
     public News getNews(String keyword, String timeIndex) {
         return News.createNewsBuilder()
@@ -31,7 +32,7 @@ public class NewsDto {
 
     @QueryProjection
     public NewsDto(Long id, String keyword, String title, String imageLink,
-                   String link, String pubDate, String timeIndex) {
+                   String link, String pubDate, String timeIndex, LocalDateTime published) {
         this.id = id;
         this.keyword = keyword;
         this.title = title;
@@ -39,6 +40,7 @@ public class NewsDto {
         this.link = link;
         this.pubDate = pubDate;
         this.timeIndex = timeIndex;
+        this.published = published;
     }
 
     private LocalDateTime dToLdt(String date) {
